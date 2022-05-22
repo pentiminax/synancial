@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ account.name }} | MyBudget{% endblock %}
+
+{% block body %}
+    <div class="container mb-5">
+
+        <div class="checking-view-data d-none" data-account-id="{{ account.id }}"></div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <h5>{{ account.name }} - {{ account.balance }} €</h5>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xl-3">
+                <div class="input-group mb-sm-3 mb-xl-0">
+                    <label class="input-group-text" for=""><i class="fa fa-calendar-alt"></i></label>
+                    <select class="form-select">
+                        <option value="1w">7 derniers jours</option>
+                        <option value="1m">30 derniers jours</option>
+                        <option value="ytd">Année en cours</option>
+                        <option value="1y">Dernière année</option>
+                        <option value="all">Tout</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                <div class="input-group mb-sm-3 mb-xl-0">
+                    <label class="input-group-text" for=""><i class="fas fa-coins"></i></label>
+                    <select class="form-select select-wording">
+                        {% for wording in wordings %}
+                            <option value="{{ wording }}">{{ wording }}</option>
+                        {% endfor %}
+                        <option selected value="all">Tous</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xl-3">
+                <div class="input-group mb-sm-3 mb-xl-0">
+                    <label class="input-group-text"><i class="fas fa-money-bill"></i></label>
+                    <select class="form-select">
+                        <option value="small">Entre 0 et 249 €</option>
+                        <option value="medium">Entre 250 et 500 €</option>
+                        <option value="large">Plus de 500 €</option>
+                        <option value="all" selected>Tous</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xl-2">
+                <div class="input-group mb-sm-3 mb-xl-0">
+                    <label class="input-group-text"><i class="fas fa-asterisk"></i></label>
+                    <select class="form-select select-operation-type">
+                        <option value="credit">Crédit</option>
+                        <option value="debit">Débit</option>
+                        <option value="all" selected>Tous</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="dropdown-divider my-3"></div>
+
+        <div class="row">
+
+            <div class="col-xl-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div>
+                            <canvas id="checkingViewLineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div>
+                            <canvas id="checkingViewBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-6 transactions-list">
+                {% for transaction in transactions %}
+                    {% set valueClass = transaction.value > 0 ? 'text-success' : 'text-danger' %}
+                    <div class="card mb-3 transaction">
+                        <div class="card-body" data-id="{{ transaction.id }}">
+                            <h5 class="card-title" data-wording="{{ transaction.wording }}">
+                                {{ transaction.original_wording }}
+                            </h5>
+                            <p class="card-text">
+                                <span class="fs-5 float-end {{ valueClass }}" data-secret-mode="true">
+                                    <b>{{ transaction.value }} €</b>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            {{ transaction.date|date('d/m/Y') }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('checking_view') }}
+{% endblock %}

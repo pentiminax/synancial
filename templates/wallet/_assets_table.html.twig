@@ -1,0 +1,38 @@
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Actifs</th>
+        <th>Répartition</th>
+        <th>Valeur</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <a class="text-dark text-decoration-none" href="{{ path('wallet_checking_list') }}">
+                <b>Comptes bancaires <i class="fas fa-long-arrow-alt-right"></i></b>
+            </a>
+        </td>
+        <td>{{ assets.checking.share|round }} %</td>
+        <td><span data-secret-mode="true">{{ assets.checking.amount|round }} €</span></td>
+    </tr>
+    <tr>
+        <td>
+            <a class="text-dark text-decoration-none" href="{{ path('wallet_market') }}">
+                <b>Comptes d'investissements <i class="fas fa-long-arrow-alt-right"></i></b>
+            </a>
+        </td>
+        <td>{{ assets.market.share|round }} %</td>
+        <td><span data-secret-mode="true">{{ assets.market.amount|round }} €</span></td>
+    </tr>
+    <tr>
+        <td>
+            <a class="text-dark text-decoration-none" href="{{ path('wallet_checking_list') }}">
+                <b>Livrets <i class="fas fa-long-arrow-alt-right"></i></b>
+            </a>
+        </td>
+        <td>{{ assets.savings.share|round }} %</td>
+        <td><span data-secret-mode="true">{{ assets.savings.amount|round }} €</span></td>
+    </tr>
+    </tbody>
+</table>

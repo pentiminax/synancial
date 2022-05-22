@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    form_themes: ['bootstrap_5_horizontal_layout.html.twig']
+    globals:
+        budgetInsightApiService: '@App\Service\BudgetInsightApiService'
 
 when@test:
     twig:

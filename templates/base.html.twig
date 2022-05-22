@@ -1,10 +1,11 @@
+{% set  isSecretModeEnabled = app.user.isSecretModeEnabled %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -13,7 +14,81 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body {% if isSecretModeEnabled %}class="secret-mode"{% endif %}>
+        <main>
+
+            <div class="container">
+                <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+                    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                        MyBudget
+                    </a>
+
+                    <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                        {{ _self.navlink('Tableau de bord', 'dashboard') }}
+                        {{ _self.navlink('Portefeuille', 'wallet') }}
+                        {{ _self.navlink('A propos', 'about', '_blank') }}
+                    </ul>
+
+                    <div class="col-md-3 text-end">
+                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a type="button" href="{{ path('login') }}" class="btn btn-outline-primary me-2">Se connecter</a>
+                            <a type="button" href="{{ path('register') }}" class="btn btn-primary">S'inscrire</a>
+                        {% else %}
+                            {% set isSyncButtonDisabled = app.user.lastSync.diff(date('now')).h < 1 and app.user.lastSync.diff(date('now')).d < 1 %}
+
+                            {% set syncButtonClass =  'sync-button' %}
+                            {% set syncButtonTitle = 'Mis à jour ' ~ app.user.lastSync|ago('now', 'fr') %}
+
+                            {% if isSyncButtonDisabled %}
+                                {% set syncButtonClass =  'disabled-sync-button' %}
+                                {% set syncButtonTitle = 'La synchronisation sera de nouveau disponible à ' ~ app.user.lastSync.modify('+ 1 hour').format('H:i') %}
+                            {% endif %}
+
+                            <button class="btn btn-outline-primary {{ syncButtonClass }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ syncButtonTitle }}">
+                                <i class="fas fa-sync"></i>
+                                <span class="spinner d-none">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                            </button>
+
+                            <button class="btn btn-outline-primary secret-mode-button">
+                                {{ isSecretModeEnabled ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>' }}
+                            </button>
+
+                            <button class="btn btn-outline-primary add-asset-button">
+                                <i class="fas fa-add"></i>
+                            </button>
+
+                            <div class="dropdown float-end">
+                                <a class="nav-link link-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Mon compte
+                                </a>
+                                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+                                    <li><a class="dropdown-item" href="{{ path('user_settings') }}">Paramètres</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ path('logout') }}">Se déconnecter</a></li>
+                                </ul>
+                            </div>
+
+                        {%endif%}
+
+                    </div>
+
+                </header>
+            </div>
+
+            <div class="flashes d-none" data-flashes="{{ app.flashes|json_encode }}"></div>
+
+            {% block body %}{% endblock %}
+        </main>
     </body>
 </html>
+
+{% macro navlink(navlinkLabel, navlinkRoute, target = '_self') %}
+    {% set currentRoute = app.request.get('_route') %}
+
+    {% set activeClass = currentRoute == navlinkRoute ? 'active' : '' %}
+
+    <li><a target="{{ target }}" href="{{ path(navlinkRoute) }}" class="nav-link mx-2 link-dark {{ activeClass }}">{{ navlinkLabel }}</a></li>
+{% endmacro %}

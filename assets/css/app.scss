@@ -1,0 +1,48 @@
+@import "~bootstrap/scss/bootstrap";
+
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import "~@fortawesome/fontawesome-free/css/v4-shims.min.css";
+
+@import "~flatpickr/dist/flatpickr";
+
+@import  "tablesort/_site/tablesort.css";
+
+body.secret-mode {
+  span[data-secret-mode="true"] {
+    transition: all .1s ease-in-out;
+    filter: blur(.5rem);
+  }
+}
+
+.checking-account {
+  @extend .card-body;
+}
+
+.checking-account:hover {
+  cursor: pointer;
+  @extend .bg-light;
+}
+
+.wallet-checking-list:hover {
+  cursor: pointer;
+}
+
+.disabled-sync-button {
+  opacity: 0.5;
+}
+
+.nav-link:hover {
+  @extend .active;
+}
+
+.connector-item {
+  .connector-sync-button {
+     display: none;
+   }
+}
+
+.connector-item:hover {
+  .connector-sync-button {
+    display: block;
+  }
+}

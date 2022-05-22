@@ -1,0 +1,25 @@
+<form method="post" id="validateAccountForm">
+    <div class="row">
+        <div class="col-xl-6">
+            <label for="firstName" class="form-label">Prénom</label>
+            <input type="text" class="form-control" id="firstName" value="" required=>
+        </div>
+        <div class="col-xl-6">
+            <label for="firstName" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="firstName" value="" required>
+        </div>
+    </div>
+
+    <div class="row mb-xl-3">
+        <div class="col">
+            <label for="firstName" class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="firstName" value="{{ app.user.email }}" required>
+        </div>
+    </div>
+
+    <div class="row text-end">
+        <div class="col">
+            <button type="submit" class="btn btn-primary validate-account">Valider</button>
+        </div>
+    </div>
+</form>

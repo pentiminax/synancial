@@ -1,0 +1,64 @@
+{% for account in accounts %}
+
+    {% set investments = budgetInsightApiService.listInvestmentsByAccount(account.id) %}
+
+    <div class="accordion mb-3">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ account.id }}" aria-expanded="true" aria-controls="collapse-{{ account.id }}">
+                    {{ account.connection.connector.name }}
+                </button>
+            </h2>
+            <div id="collapse-{{ account.id }}" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <table class="table table-hover market-table" id="table-{{ account.id }}">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Quantité</th>
+                            <th>Cours</th>
+                            <th>Valeur</th>
+                            <th>+/-value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for investment in investments %}
+                            {% if investment.quantity > 0 %}
+                                <tr>
+                                    <td>
+                                        <a target="_blank" class="text-decoration-none" href="https://www.boursorama.com/cours/{{ investment.code }}"><b>{{ investment.label }}</b></a>
+                                    </td>
+                                    <td>
+                                        <span data-secret-mode="true">{{ investment.quantity|round(2) }}</span>
+                                    </td>
+
+                                    <td data-sort="{{ investment.unitprice|round(2) }}">{{ investment.unitprice|round(2) }} €</td>
+
+                                    <td data-sort="{{ investment.valuation|round(2) }}">
+                                        <span data-secret-mode="true">{{ investment.valuation|round(2) }} €</span>
+                                    </td>
+
+                                    {% if investment.prev_diff %}
+                                    <td class="fw-bold" data-sort="{{ investment.prev_diff|round }}">
+                                        <span class="{{ investment.prev_diff|diff_class }}"
+                                              data-secret-mode="true">
+                                            {{ investment.prev_diff|round(2)|diff_sign }} €
+                                        </span>
+                                            <div class="{{ investment.prev_diff|diff_class }}">
+                                                <small>{{ investment.prev_diff_percent|round(2)|diff_sign }} %</small>
+                                            </div>
+                                    </td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

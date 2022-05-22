@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Portefeuille{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body assets-card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body liabilities-card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('wallet') }}
+{% endblock %}

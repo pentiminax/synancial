@@ -1,0 +1,14 @@
+{% for account in accounts %}
+    <div class="card mb-3">
+        <div class="card-header">
+            {{ account.bank.name }}&nbsp;
+            <i class="fas fa-circle-check text-success"></i>
+        </div>
+        <div class="checking-account" data-id="{{ account.id }}">
+            <h5 class="card-title">
+                {{ account.name }}
+                <span class="float-end text-success" data-secret-mode="true">{{ account.balance }} €</span>
+            </h5>
+        </div>
+    </div>
+{% endfor %}
