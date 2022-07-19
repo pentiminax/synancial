@@ -58,12 +58,14 @@ class BudgetInsightApiService
 
     /**
      * This endpoint generates a new temporary code for the current user.
-     * @param string $token
-     * @return TemporaryCode
      */
-    public function generateTemporaryCode(string $token): TemporaryCode
+    public function generateTemporaryCode(bool $useBearerToken = false): TemporaryCode
     {
-        $this->useBearerToken();
+        if ($useBearerToken) {
+            $this->useBearerToken();
+        } else {
+            $this->options['auth_bearer'] = $this->generateNewUserAccessToken()->auth_token;
+        }
 
         $data = $this->request('GET', self::TEMPORARY_CODE_ENDPOINT);
 
@@ -135,12 +137,13 @@ class BudgetInsightApiService
 
         $url = "users/me/accounts/$accountId/transactions";
 
-        $minDate = $minDate ? $minDate : new \DateTime('- 7 days');
-        $maxDate = $maxDate ? $maxDate : new \DateTime();
+        $minDate = $minDate ?: new \DateTime('- 7 days');
+        $maxDate = $maxDate ?: new \DateTime();
 
         $this->options['query'] = [
             'min_date' => $minDate->format('Y-m-d'),
-            'max_date' => $maxDate->format('Y-m-d')
+            'max_date' => $maxDate->format('Y-m-d'),
+            'limit' => 10
         ];
 
         $data = json_decode($this->request('GET', $url), true);

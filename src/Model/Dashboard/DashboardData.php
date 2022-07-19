@@ -79,6 +79,10 @@ class DashboardData implements ViewDataInterface
 
         $totalAmount = $this->total->getAmount();
 
+        if (0.0 === $totalAmount) {
+            return;
+        }
+
         $checking->setShare($checking->getAmount() / $totalAmount * 100);
         $market->setShare($market->getAmount() / $totalAmount * 100);
         $savings->setShare($savings->getAmount() / $totalAmount * 100);

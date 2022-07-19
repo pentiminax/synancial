@@ -31,7 +31,15 @@ body.secret-mode {
   opacity: 0.5;
 }
 
-.nav-link:hover {
+.menu-item {
+  @extend .nav-link, .mx-2, .link-dark;
+}
+
+.menu-item.active {
+  color: #fff !important;
+}
+
+.menu-item:hover {
   @extend .active;
 }
 

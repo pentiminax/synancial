@@ -28,6 +28,10 @@ class Dashboard {
 
         const json = await response.json();
 
+        if (!json.result) {
+            return;
+        }
+
         this.checkingShare = json.result.distribution.checking.share;
         this.marketShare = json.result.distribution.market.share;
         this.savingsShare = json.result.distribution.savings.share;
@@ -46,6 +50,10 @@ class Dashboard {
     }
 
     async loadAllocationChart() {
+        if (!this.checkingShare || !this.marketShare || !this.savingsShare) {
+            return;
+        }
+
         const data = {
             labels: [
                 'Compte bancaires',

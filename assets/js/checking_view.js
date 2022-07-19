@@ -1,21 +1,41 @@
 import {Chart, registerables} from "chart.js";
 
+let checkingView;
+
 document.addEventListener('DOMContentLoaded', async () => {
     Chart.register(...registerables);
 
     const accountId = document.querySelector('.checking-view-data').dataset.accountId;
 
-    const checkingView = new CheckingView(accountId);
+    checkingView = new CheckingView(accountId);
 
     await checkingView.loadUserTimeSeries();
     checkingView.loadCheckingViewLineChart();
     checkingView.loadCheckingViewBarChart();
 });
 
+document.addEventListener('scroll', () => {
+    const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+        checkingView.currentPage++;
+        checkingView.loadTransactions();
+    }
+}, {
+    passive: true
+})
+
 class CheckingView {
     accountId;
-
+    currentPage = 0;
+    limit = 10;
     transactions;
+
+
+    /**
+     * @type {HTMLElement}
+     */
+    loader;
 
     /**
      * @var {Array}
@@ -42,6 +62,7 @@ class CheckingView {
     yBarChartMin;
 
     constructor(accountId) {
+        this.loader = document.querySelector('.loader')
         this.accountId = accountId;
         this.listenSelectOperationType();
         this.listenSelectWording();
@@ -216,5 +237,34 @@ class CheckingView {
                 }
             }
         );
+    }
+
+    loadTransactions() {
+        this.showLoader();
+
+        setTimeout(async () => {
+            const response = await this.getTransactions(this.currentPage, this.limit);
+        }, 500);
+
+        this.hideLoader();
+
+    }
+
+    async getTransactions(page, limit) {
+        const response = await fetch('');
+
+        if (!response.ok) {
+            return;
+        }
+
+        return await response.json();
+    }
+
+    showLoader() {
+        this.loader.classList.remove('d-none');
+    }
+
+    hideLoader() {
+        this.loader.classList.add('d-none');
     }
 }

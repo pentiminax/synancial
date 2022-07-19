@@ -32,7 +32,6 @@ class WalletData implements ViewDataInterface
         return $this;
     }
 
-
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
@@ -50,6 +49,10 @@ class WalletData implements ViewDataInterface
         $assets = $this->distribution->getAssets();
 
         $totalAmount = array_sum($assets->map(fn(Asset $asset) => $asset->getAmount())->toArray());
+
+        if (0.0 === $totalAmount) {
+            return;
+        }
 
         foreach($assets as $asset) {
             $asset->setShare($asset->getAmount() / $totalAmount * 100);

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Connector;
 use App\Entity\User;
 use App\Repository\ConnectorRepository;
 use App\Service\BudgetInsightApiService;
@@ -73,17 +74,22 @@ class WalletController extends AbstractController
     }
 
     #[Route('/wallet/add/{uuid}', name: 'wallet_add')]
-    public function add(string $uuid, BudgetInsightApiService $api): Response
+    public function add(Connector $connector, BudgetInsightApiService $api): Response
     {
-        $bearerCode = $this->getUser()->getBearerToken();
+        $useBearerToken = (bool)$this->getUser()->getBearerToken();
 
-        $temporaryCode = $api->generateTemporaryCode($bearerCode);
+        $temporaryCode = $api->generateTemporaryCode($useBearerToken);
+
+        $redirectUri = $this->generateUrl('api_users_me_webview', [
+            'bank_name' => $connector->getName(),
+            'connector_uuids' => $connector->getUuid()
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $parameters = [
             'client_id' => $this->getParameter('client_id'),
             'client_secret' => $this->getParameter('client_secret'),
-            'redirect_uri' =>  $this->generateUrl('api_users_me_webview', referenceType: UrlGeneratorInterface::ABSOLUTE_URL),
-            'connector_uuids' => $uuid,
+            'redirect_uri' =>  $redirectUri,
+            'connector_uuids' => $connector->getUuid(),
             'code' => $temporaryCode->code
         ];
 

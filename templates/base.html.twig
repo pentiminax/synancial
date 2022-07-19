@@ -34,7 +34,7 @@
                             <a type="button" href="{{ path('login') }}" class="btn btn-outline-primary me-2">Se connecter</a>
                             <a type="button" href="{{ path('register') }}" class="btn btn-primary">S'inscrire</a>
                         {% else %}
-                            {% set isSyncButtonDisabled = app.user.lastSync.diff(date('now')).h < 1 and app.user.lastSync.diff(date('now')).d < 1 %}
+                            {% set isSyncButtonDisabled = app.user|is_sync_button_disabled %}
 
                             {% set syncButtonClass =  'sync-button' %}
                             {% set syncButtonTitle = 'Mis à jour ' ~ app.user.lastSync|ago('now', 'fr') %}
@@ -61,7 +61,7 @@
                             </button>
 
                             <div class="dropdown float-end">
-                                <a class="nav-link link-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link link-dark dropdown-toggle ms-2 mt-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Mon compte
                                 </a>
                                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
@@ -90,5 +90,5 @@
 
     {% set activeClass = currentRoute == navlinkRoute ? 'active' : '' %}
 
-    <li><a target="{{ target }}" href="{{ path(navlinkRoute) }}" class="nav-link mx-2 link-dark {{ activeClass }}">{{ navlinkLabel }}</a></li>
+    <li><a target="{{ target }}" href="{{ path(navlinkRoute) }}" class="menu-item {{ activeClass }}">{{ navlinkLabel }}</a></li>
 {% endmacro %}

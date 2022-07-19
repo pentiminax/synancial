@@ -51,7 +51,7 @@ class ApiController extends AbstractController
     {
         $dashboardData = $this->userSessionService->getDashboardData();
 
-        if (!$dashboardData) {
+        if (!$dashboardData && $this->getUser()->getBearerToken()) {
             $dashboardData = new DashboardData();
             $bankAccounts = $this->api->listBankAccounts();
             $apiService->aggregateAssetsAccounts($dashboardData, $bankAccounts);
@@ -206,12 +206,8 @@ class ApiController extends AbstractController
             ->toArray();
 
         foreach ($connectionIds as $connectionId) {
-            try {
-                $connection = $this->api->updateConnection($connectionId);
-                $logger->info('Synchronization result:' . json_encode($connection));
-            } catch (SynchronizationException) {
-                continue;
-            }
+            $connection = $this->api->updateConnection($connectionId);
+            $logger->info('Synchronization result:' . json_encode($connection));
         }
 
         $user->setLastSync($now);
@@ -308,18 +304,23 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/webview', name: 'api_users_me_webview')]
     public function webview(Request $request, EntityManagerInterface $em): Response
     {
-        $error = $request->query->get('error');
+        $error = $request->get('error');
 
         if ($error) {
             return $this->redirectToRoute('dashboard');
         }
 
-        $code = $request->query->get('code');
+        $code = $request->get('code');
+        $connectionId = $request->get('connection_id');
 
         if ($code) {
             $permanentUserAccessToken = $this->api->generatePermanentUserAccessToken($code);
             $this->getUser()->setBearerToken($permanentUserAccessToken->access_token);
             $em->flush();
+        }
+
+        if ($connectionId) {
+
         }
 
         return $this->redirectToRoute('dashboard');
