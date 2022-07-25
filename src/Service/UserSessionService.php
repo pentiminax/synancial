@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Model\Dashboard\DashboardData;
-use App\Model\ViewDataInterface;
+use App\Model\TimestampedInterface;
 use App\Model\Wallet\Checking\CheckingData;
 use App\Model\Wallet\WalletData;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -78,7 +78,12 @@ class UserSessionService
         $this->getSession()->set('WalletViewData', $data);
     }
 
-    private function isDataExpired(ViewDataInterface $data): bool
+    public function clear(): void
+    {
+        $this->getSession()->clear();
+    }
+
+    private function isDataExpired(TimestampedInterface $data): bool
     {
         $isDataExpired = false;
 

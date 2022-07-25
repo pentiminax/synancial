@@ -4,10 +4,10 @@ namespace App\Model\Wallet;
 
 use App\Model\Asset;
 use App\Model\Distribution;
-use App\Model\ViewDataInterface;
+use App\Model\TimestampedInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class WalletData implements ViewDataInterface
+class WalletData implements TimestampedInterface
 {
     private Distribution $distribution;
 

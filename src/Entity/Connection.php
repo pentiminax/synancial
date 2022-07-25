@@ -10,20 +10,27 @@ class Connection
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\ManyToOne(targetEntity: Connector::class, inversedBy: 'connections')]
     #[ORM\JoinColumn(nullable: false)]
-    private $connector;
+    private ?Connector $connector;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $lastUpdate;
+    private ?\DateTime $lastUpdate;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'connections')]
-    private $user;
+    private ?User $user;
 
     #[ORM\OneToOne(mappedBy: 'connection', targetEntity: Account::class, cascade: ['persist', 'remove'])]
-    private $account;
+    private ?Account $account;
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {

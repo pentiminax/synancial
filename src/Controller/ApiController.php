@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Connection;
 use App\Entity\User;
-use App\Exception\SynchronizationException;
 use App\Model\ApiResponse;
 use App\Model\Dashboard\DashboardData;
 use App\Model\Wallet\Checking\Account;
@@ -15,6 +14,7 @@ use App\Repository\ConnectionRepository;
 use App\Repository\ConnectorRepository;
 use App\Service\ApiService;
 use App\Service\BudgetInsightApiService;
+use App\Service\ConnectionService;
 use App\Service\UserSessionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -30,6 +30,7 @@ class ApiController extends AbstractController
 {
     public function __construct(
         private readonly BudgetInsightApiService $api,
+        private readonly ConnectorRepository $connectorRepo,
         private readonly UserSessionService      $userSessionService,
         private readonly EntityManagerInterface  $em
     )
@@ -134,7 +135,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/users/me/connections', name: 'api_users_me_connections')]
-    public function connections(ConnectorRepository $connectorRepo): Response
+    public function connections(): Response
     {
         $accounts = [];
         $connectorsData = [];
@@ -146,7 +147,7 @@ class ApiController extends AbstractController
             $connectorIds[] = $connection->id_connector;
         }
 
-        $connectors = $connectorRepo->findBy([
+        $connectors = $this->connectorRepo->findBy([
             'id' => $connectorIds
         ]);
 
@@ -302,7 +303,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/users/me/webview', name: 'api_users_me_webview')]
-    public function webview(Request $request, EntityManagerInterface $em): Response
+    public function webview(Request $request, ConnectionService $connectionService, UserSessionService $userSessionService): Response
     {
         $error = $request->get('error');
 
@@ -311,16 +312,22 @@ class ApiController extends AbstractController
         }
 
         $code = $request->get('code');
+        $connectorUuids = $request->get('connector_uuids');
         $connectionId = $request->get('connection_id');
 
         if ($code) {
             $permanentUserAccessToken = $this->api->generatePermanentUserAccessToken($code);
             $this->getUser()->setBearerToken($permanentUserAccessToken->access_token);
-            $em->flush();
+            $this->em->flush();
         }
 
-        if ($connectionId) {
+        if ($connectorUuids && $connectionId) {
+            $connector = $this->connectorRepo->findOneBy(['uuid' => $connectorUuids]);
 
+            if ($connector) {
+                $connectionService->add($connector, $connectionId);
+                $this->userSessionService->clear();
+            }
         }
 
         return $this->redirectToRoute('dashboard');

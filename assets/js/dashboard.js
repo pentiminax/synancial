@@ -50,7 +50,7 @@ class Dashboard {
     }
 
     async loadAllocationChart() {
-        if (!this.checkingShare || !this.marketShare || !this.savingsShare) {
+        if (null === this.checkingShare || null === this.marketShare || null === this.savingsShare) {
             return;
         }
 

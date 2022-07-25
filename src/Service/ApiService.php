@@ -3,14 +3,14 @@
 namespace App\Service;
 
 use App\Model\BankAccount;
-use App\Model\ViewDataInterface;
+use App\Model\TimestampedInterface;
 
 class ApiService
 {
     /**
      * @param BankAccount[] $bankAccounts
      */
-    public function aggregateAssetsAccounts(ViewDataInterface &$viewData, array $bankAccounts): void
+    public function aggregateAssetsAccounts(TimestampedInterface &$viewData, array $bankAccounts): void
     {
         $distribution = $viewData->getDistribution();
 

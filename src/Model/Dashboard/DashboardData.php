@@ -4,10 +4,10 @@ namespace App\Model\Dashboard;
 
 use App\Model\Asset;
 use App\Model\Distribution;
-use App\Model\ViewDataInterface;
+use App\Model\TimestampedInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class DashboardData implements ViewDataInterface
+class DashboardData implements TimestampedInterface
 {
     private Distribution $distribution;
 
