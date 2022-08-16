@@ -2,7 +2,7 @@ import '../css/app.scss';
 
 import {Alert} from "./alert";
 import {Collapse, Dropdown, Tooltip} from "bootstrap";
-import {Request} from "./request";
+import {ajaxFetch} from "./functions/request";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const app = new App();
@@ -89,12 +89,7 @@ class App {
         this.syncButtonIcon.classList.add('d-none');
         this.syncButtonSpinner.classList.remove('d-none');
 
-        const response = await fetch('/api/users/me/sync', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            method: 'PUT'
-        });
+        const response = await ajaxFetch('/api/users/me/sync', 'PUT');
 
         if (!response.ok) {
             this.resetSyncButtonState();
@@ -104,7 +99,7 @@ class App {
 
         this.resetSyncButtonState();
 
-        await Alert.toast('Vos comptes ont bien été synchronisé !');
+        await Alert.toast('Vos comptes sont en cours de synchronisation !');
     }
 
     async toggleSecretMode() {
@@ -120,7 +115,7 @@ class App {
             this.secretModeButtonIcon.classList.add('fa-eye-slash');
         }
 
-        await Request.fetch('/api/user/secretmode', 'PATCH', {
+        await ajaxFetch('/api/user/secretmode', 'PATCH', {
             'secretMode': !isSecretModeEnabled
         });
     }
@@ -131,7 +126,7 @@ class App {
     }
 
     async fetchUserState() {
-        const json = await Request.fetch('/api/users/me', 'GET');
+        await ajaxFetch('/api/users/me', 'GET');
     }
 
     async toastFlashes() {

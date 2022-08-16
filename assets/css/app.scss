@@ -14,10 +14,6 @@ body.secret-mode {
   }
 }
 
-.checking-account {
-  @extend .card-body;
-}
-
 .checking-account:hover {
   cursor: pointer;
   @extend .bg-light;
@@ -53,4 +49,9 @@ body.secret-mode {
   .connector-sync-button {
     display: block;
   }
+}
+
+.savings-account:hover {
+  cursor: pointer;
+  @extend .bg-light;
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Model\Wallet\Checking;
+namespace App\Model\Wallet\Savings;
 
 use App\Model\TimestampedInterface;
+use App\Model\Wallet\Checking\Account;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class CheckingData implements TimestampedInterface
+class SavingsData implements TimestampedInterface
 {
     private ArrayCollection $accounts;
 
@@ -37,7 +38,7 @@ class CheckingData implements TimestampedInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

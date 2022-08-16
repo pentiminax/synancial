@@ -1,4 +1,5 @@
 const TableSort = require('tablesort');
+const {ajaxFetch} = require("./functions/request");
 
 document.addEventListener('DOMContentLoaded', async () => {
     const market = new Market();
@@ -34,12 +35,7 @@ class Market {
     }
 
     async loadMarketAccounts() {
-        const response = await fetch('/api/users/me/views/wallet/market', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            method: 'GET'
-        });
+        const response = await ajaxFetch('/api/users/me/views/wallet/market', 'GET');
 
         const json = await response.json();
 

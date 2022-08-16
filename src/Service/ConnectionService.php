@@ -16,7 +16,7 @@ class ConnectionService
     {
     }
 
-    public function add(Connector $connector, int $connectionId)
+    public function add(Connector $connector, int $connectionId): void
     {
         $connection = new Connection();
         $connection->setConnector($connector);

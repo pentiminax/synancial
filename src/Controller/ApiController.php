@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\AccountType;
 use App\Entity\Connection;
 use App\Entity\User;
 use App\Model\ApiResponse;
 use App\Model\Dashboard\DashboardData;
 use App\Model\Wallet\Checking\Account;
 use App\Model\Wallet\Checking\CheckingData;
+use App\Model\Wallet\Savings\SavingsData;
 use App\Model\Wallet\WalletData;
 use App\Repository\AccountTypeRepository;
 use App\Repository\ConnectionRepository;
@@ -15,6 +17,7 @@ use App\Repository\ConnectorRepository;
 use App\Service\ApiService;
 use App\Service\BudgetInsightApiService;
 use App\Service\ConnectionService;
+use App\Service\TimeSerieService;
 use App\Service\UserSessionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -30,7 +33,7 @@ class ApiController extends AbstractController
 {
     public function __construct(
         private readonly BudgetInsightApiService $api,
-        private readonly ConnectorRepository $connectorRepo,
+        private readonly ConnectorRepository     $connectorRepo,
         private readonly UserSessionService      $userSessionService,
         private readonly EntityManagerInterface  $em
     )
@@ -44,6 +47,20 @@ class ApiController extends AbstractController
 
         return $this->json([
             'secretMode' => $user->isIsSecretModeEnabled()
+        ]);
+    }
+
+    #[Route('/api/users/me/accounts/{id}/transactions', name: 'api_users_me_accounts_transaction', methods: ['GET'])]
+    public function getTransactionsByAccount(int $id, Request $request): Response
+    {
+        $transactions = $this->api->listTransactions($id, $request->get('offset', 0), $request->get('limit', 10));
+
+        return $this->json([
+            'error' => 'null',
+            'message' => 'OK',
+            'result' => $this->renderView('partials/_transactions_list.html.twig', [
+                'transactions' => $transactions
+            ])
         ]);
     }
 
@@ -93,28 +110,38 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/views/wallet/checking', name: 'api_users_me_views_wallet_checking', methods: ['GET'])]
     public function accounts(): Response
     {
+        $this->userSessionService->clear();
         $checkingData = $this->userSessionService->getCheckingData();
 
         if (!$checkingData) {
             $checkingData = new CheckingData();
-
-            $bankAccounts = $this->api->listBankAccounts('checking');
+            $data = [];
+            $bankAccounts = $this->api->listBankAccounts(AccountType::CHECKING);
 
             foreach ($bankAccounts as $bankAccount) {
-                /** @var Connection|null $connection */
-                $connection = $this->getUser()->getConnections()->filter(fn(Connection $connection) => $connection->getId() === $bankAccount->id_connection)->first();
+                $connection = $this->getUser()->findConnection($bankAccount->id_connection);
+
+                if (!$connection) {
+                    continue;
+                }
+
                 $connector = $connection->getConnector();
 
-                $account = new Account($bankAccount);
-                $account->getBank()->setName($connector->getName());
-                $checkingData->addAccount($account);
+                if (!isset($data[$connector->getSlug()])) {
+                    $data[$connector->getSlug()] = [
+                        'name' => $connector->getName()
+                    ];
+                }
+
+                $data[$connector->getSlug()]['accounts'][] = $bankAccount;
             }
 
+            $checkingData->setData($data);
             $this->userSessionService->setCheckingData($checkingData);
         }
 
         $accountsList = $this->renderView('wallet/checking/_card_list.html.twig', [
-            'accounts' => $checkingData->getAccounts()
+            'banks' => $checkingData->getData()
         ]);
 
         return $this->json(new ApiResponse(result: $accountsList));
@@ -123,15 +150,51 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/views/wallet/market', name: 'api_users_me_views_wallet_market')]
     public function marketView(AccountTypeRepository $accountTypeRepo, ConnectionRepository $connectionRepo): Response
     {
-        $accountType = $accountTypeRepo->findOneBy(['name' => 'market']);
+        $accountType = $accountTypeRepo->findOneBy(['name' => AccountType::MARKET]);
 
-        $accounts = $this->getUser()->getAccounts($accountType);
-
-        $result = $this->renderView('wallet/investments_accordion.html.twig', [
-            'accounts' => $accounts
+        $result = $this->renderView('wallet/market/_investments_accordion.html.twig', [
+            'accounts' => $this->getUser()->getAccounts($accountType)
         ]);
 
         return $this->json(new ApiResponse(result: $result));
+    }
+
+    #[Route('/api/users/me/views/wallet/savings', name: 'api_users_me_views_wallet_savings')]
+    public function savingsView(): Response
+    {
+        $savingsData = $this->userSessionService->getSavingsData();
+
+        if (!$savingsData) {
+            $savingsData = new SavingsData();
+            $data = [];
+            $savingsAccount = $this->api->listBankAccounts(AccountType::SAVINGS);
+
+            foreach ($savingsAccount as $savingAccount) {
+                $connection = $this->getUser()->findConnection($savingAccount->id_connection);
+
+                if (!$connection) {
+                    continue;
+                }
+
+                $connector = $connection->getConnector();
+
+                if (!isset($data[$connector->getSlug()])) {
+                    $data[$connector->getSlug()] = [
+                        'name' => $connector->getName()
+                    ];
+                }
+
+                $data[$connector->getSlug()]['accounts'][] = $savingAccount;
+            }
+
+            $savingsData->setData($data);
+        }
+
+        $accountsList = $this->renderView('wallet/checking/_card_list.html.twig', [
+            'banks' => $savingsData->getData()
+        ]);
+
+        return $this->json(new ApiResponse(result: $accountsList));
     }
 
     #[Route('/api/users/me/connections', name: 'api_users_me_connections')]
@@ -174,11 +237,7 @@ class ApiController extends AbstractController
             'accounts' => $accounts
         ]);
 
-        return $this->json([
-            'error' => null,
-            'message' => 'OK',
-            'result' => $result
-        ]);
+        return $this->json(new ApiResponse(null, 'OK', $result));
     }
 
     #[Route('/api/users/me/manage/connection', name: 'api_users_me_manage_connection')]
@@ -252,43 +311,14 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/users/me/timeseries/{id}', name: 'api_users_me_timeseries')]
-    public function timeseries(?int $id): Response
+    public function timeseries(?int $id, TimeSerieService $timeSerieService): Response
     {
-        $timeseries = $this->getUser()->getTimeSeries($id);
-
         $line = [];
         $bar = [];
-
         $max = 0;
 
-        foreach ($timeseries as $timeserie) {
-            $line[] = [
-                'date' => $timeserie->getDate()->format('d M'),
-                'value' => $timeserie->getValue()
-            ];
-        }
-
-        for ($i = 0; $i < count($line); $i++) {
-            if (isset($line[$i + 1])) {
-                $bar[] = [
-                    'date' => $line[$i]['date'],
-                    'value' => -1 * abs($line[$i]['value'] - $line[$i + 1]['value'])
-                ];
-            } else if (isset($line[$i - 1])) {
-                $bar[] = [
-                    'date' => $line[$i]['date'],
-                    'value' => $line[$i]['value'] - $line[$i - 1]['value']
-                ];
-            } else {
-                $bar[] = [
-                    'date' => $line[$i]['date'],
-                    'value' => 0
-                ];
-            }
-            if (abs($bar[$i]['value']) > $max) {
-                $max = ceil(abs($bar[$i]['value']) / 100) * 100;
-            }
-        }
+        $timeSerieService->processLineChart($id, $line);
+        $timeSerieService->processBarChart($line, $bar, $max);
 
         return $this->json([
             'error' => null,

@@ -22,7 +22,7 @@ class BankAccount
 
     public float $balance;
 
-    public ?int $coming;
+    public ?float $coming;
 
     public bool $display;
 

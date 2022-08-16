@@ -21,15 +21,14 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('checking', './assets/js/checking.js')
-    .addEntry('checking_view', './assets/js/checking_view.js')
+    .addEntry('checking_list', './assets/js/wallet/checking/list.js')
+    .addEntry('checking_view', './assets/js/wallet/checking/view.js')
     .addEntry('dashboard', './assets/js/dashboard.js')
-    .addEntry('market', './assets/js/market.js')
+    .addEntry('market_list', './assets/js/wallet/market/list.js')
+    .addEntry('savings_list', './assets/js/wallet/savings/list.js')
     .addEntry('settings', './assets/js/settings.js')
     .addEntry('wallet', './assets/js/wallet.js')
     .addEntry('wallet_list', './assets/js/wallet_list.js')
-
-    .enableVueLoader()
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

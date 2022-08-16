@@ -1,14 +1,30 @@
-{% for account in accounts %}
-    <div class="card mb-3">
-        <div class="card-header">
-            {{ account.bank.name }}&nbsp;
-            <i class="fas fa-circle-check text-success"></i>
-        </div>
-        <div class="checking-account" data-id="{{ account.id }}">
-            <h5 class="card-title">
-                {{ account.name }}
-                <span class="float-end text-success" data-secret-mode="true">{{ account.balance }} €</span>
-            </h5>
+{% for key, bank in banks %}
+    <div class="accordion mb-3">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ key }}"
+                    aria-expanded="true" aria-controls="#collapse-{{ key }}">
+                {{ bank.name }}
+            </button>
+        </h2>
+        <div id="collapse-{{ key }}" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <table class="table table-hover savings-table" id="table-{{ key }}">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Solde</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for account in bank.accounts %}
+                        <tr class="{{ account.type }}-account" data-id="{{ account.id }}">
+                            <td>{{ account.name }}</td>
+                            <td><span data-secret-mode="true">{{ account.balance }} €</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endfor %}

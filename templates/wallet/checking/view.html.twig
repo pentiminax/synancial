@@ -5,7 +5,11 @@
 {% block body %}
     <div class="container mb-5">
 
-        <div class="checking-view-data d-none" data-account-id="{{ account.id }}"></div>
+        <div class="checking-view-data d-none"
+             data-account-id="{{ account.id }}"
+             data-limit="{{ limit }}"
+             data-offset="{{ offset }}">
+        </div>
 
         <div class="row mb-3">
             <div class="col">
@@ -69,50 +73,37 @@
 
         <div class="row">
 
-            <div class="col-xl-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div>
-                            <canvas id="checkingViewLineChart"></canvas>
+            <div class="col-xl-5">
+                <div class="sticky-top">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div>
+                                <canvas id="checkingViewLineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div>
+                                <canvas id="checkingViewBarChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div>
-                            <canvas id="checkingViewBarChart"></canvas>
-                        </div>
-                    </div>
+            <div class="col-xl-7 transactions-list">
+                {% include 'partials/_transactions_list.html.twig' with {'transactions': transactions} %}
+                <div class="text-center">
+                    <button class="btn btn-primary load-more-transactions-button" type="button">
+                        <span>Charger plus de résultats</span>
+                        <span class="d-none loader spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
 
 
-            <div class="col-xl-6 transactions-list">
-                {% for transaction in transactions %}
-                    {% set valueClass = transaction.value > 0 ? 'text-success' : 'text-danger' %}
-                    <div class="card mb-3 transaction">
-                        <div class="card-body" data-id="{{ transaction.id }}">
-                            <h5 class="card-title" data-wording="{{ transaction.wording }}">
-                                {{ transaction.original_wording }}
-                            </h5>
-                            <p class="card-text">
-                                <span class="fs-5 float-end {{ valueClass }}" data-secret-mode="true">
-                                    <b>{{ transaction.value }} €</b>
-                                </span>
-                            </p>
-                        </div>
-                        <div class="card-footer text-muted">
-                            {{ transaction.date|date('d/m/Y') }}
-                        </div>
-                    </div>
-                {% endfor %}
-                <div class="d-flex justify-content-center loader d-none">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>

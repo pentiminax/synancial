@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AccountTypeRepository::class)]
 class AccountType
 {
+    const CHECKING = 'checking';
+    const MARKET = 'market';
+    const SAVINGS = 'savings';
+
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     private $id;

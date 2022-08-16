@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ account.name }} | MyBudget{% endblock %}
+
+{% block body %}
+    <div class="container mb-5">
+
+        <div class="row mb-3">
+            <div class="col">
+                <h5>{{ account.name }} - {{ account.balance }} €</h5>
+            </div>
+        </div>
+
+        <div class="row"></div>
+
+        <div class="row">
+            <div class="col-xl-5"></div>
+            <div class="col-xl-7">
+                {% include 'partials/_transactions_list.html.twig' with {'transactions': transactions} %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

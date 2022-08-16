@@ -35,7 +35,7 @@ class Connector
     #[ORM\Column(type: 'string', length: 6, nullable: true)]
     private $color;
 
-    #[ORM\Column(type: 'string', length: 3, nullable: true)]
+    #[ORM\Column(type: 'string', length: 4, nullable: true)]
     private $slug;
 
     #[ORM\Column(type: 'integer', nullable: true)]

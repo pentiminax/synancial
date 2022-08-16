@@ -1,0 +1,18 @@
+{% for transaction in transactions %}
+    {% set valueClass = transaction.value > 0 ? 'text-success' : 'text-danger' %}
+    <div class="card mb-3 transaction">
+        <div class="card-body" data-id="{{ transaction.id }}">
+            <h5 class="card-title" data-wording="{{ transaction.wording }}">
+                {{ transaction.original_wording }}
+            </h5>
+            <p class="card-text">
+                                <span class="fs-5 float-end {{ valueClass }}" data-secret-mode="true">
+                                    <b>{{ transaction.value }} €</b>
+                                </span>
+            </p>
+        </div>
+        <div class="card-footer text-muted">
+            {{ transaction.date|date('d/m/Y') }}
+        </div>
+    </div>
+{% endfor %}

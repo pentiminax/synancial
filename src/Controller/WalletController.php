@@ -26,10 +26,8 @@ class WalletController extends AbstractController
     #[Route('/wallet/list', name: 'wallet_list')]
     public function list(ConnectorRepository $connectorRepo): Response
     {
-        $connectors = $connectorRepo->findAll();
-
-        return $this->render('wallet/add.html.twig', [
-            'connectors' => $connectors
+        return $this->render('wallet/list.html.twig', [
+            'connectors' => $connectorRepo->findAll()
         ]);
     }
 
@@ -60,8 +58,10 @@ class WalletController extends AbstractController
 
         sort($wordings);
 
-        return $this->render('wallet/checking_view.html.twig', [
+        return $this->render('wallet/checking/view.html.twig', [
             'account' => $account,
+            'limit' => 10,
+            'offset' => 0,
             'transactions' => $transactions,
             'wordings' => $wordings
         ]);
@@ -70,7 +70,7 @@ class WalletController extends AbstractController
     #[Route('/wallet/market', name: 'wallet_market')]
     public function market(): Response
     {
-        return $this->render('wallet/market.html.twig');
+        return $this->render('wallet/market/index.html.twig');
     }
 
     #[Route('/wallet/add/{uuid}', name: 'wallet_add')]
@@ -88,7 +88,7 @@ class WalletController extends AbstractController
         $parameters = [
             'client_id' => $this->getParameter('client_id'),
             'client_secret' => $this->getParameter('client_secret'),
-            'redirect_uri' =>  $redirectUri,
+            'redirect_uri' => $redirectUri,
             'connector_uuids' => $connector->getUuid(),
             'code' => $temporaryCode->code
         ];
@@ -98,5 +98,24 @@ class WalletController extends AbstractController
         $url = "{$this->getParameter('base_url')}/auth/webview/connect?$query";
 
         return $this->redirect($url);
+    }
+
+    #[Route('/wallet/savings', name: 'wallet_savings_list')]
+    public function savingsList(): Response
+    {
+        return $this->render('wallet/savings/list.html.twig');
+    }
+
+    #[Route('/wallet/savings/{id}', name: 'wallet_savings_view')]
+    public function savingsView(int $id, BudgetInsightApiService $api): Response
+    {
+        $account = $api->getBankAccount($id);
+
+        $transactions = $api->listTransactions($id);
+
+        return $this->render('wallet/savings/view.html.twig', [
+            'account' => $account,
+            'transactions' => $transactions
+        ]);
     }
 }

@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $accounts;
 
     #[ORM\Column(type: 'boolean')]
-    private $isSecretModeEnabled;
+    private ?bool $isSecretModeEnabled = false;
 
     public function __construct()
     {
@@ -143,6 +143,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getConnections(): Collection
     {
         return $this->connections;
+    }
+
+    public function findConnection(int $idConnection): ?Connection
+    {
+        return $this->connections->filter(fn(Connection $connection) => $connection->getId() === $idConnection)->first();
     }
 
     public function addConnection(Connection $connection): self

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Portefeuille - Ajouter{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-xl-6 offset-xl-3">
+                <input type="search" class="form-control" id="exampleFormControlInput1" placeholder="Rechercher un établissement">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 offset-xl-3">
+                <div class="row">
+                    <div class="list-group">
+                        {% for connector in connectors %}
+                            <a href="#" class="list-group-item list-group-item-action connector-item">
+                                <img height="32" width="32" src="{{ asset('images/' ~ connector.uuid ~ '.webp') }}">&nbsp;{{ connector.name }}
+                                <span class="btn btn-sm btn-primary float-end connector-sync-button" data-uuid="{{ connector.uuid }}">
+                                    Synchroniser
+                                </span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+   {{ parent() }}
+   {{ encore_entry_script_tags('wallet_list') }}
+{% endblock %}

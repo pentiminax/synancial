@@ -26,6 +26,7 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
 
             $temporaryCode = $budgetInsightApiService->generateTemporaryCode();
+
             $bearerToken = $budgetInsightApiService->generatePermanentUserAccessToken($temporaryCode->code);
 
             $user->setBearerToken($bearerToken->access_token);
