@@ -1,16 +1,23 @@
 parameters:
-    base_url: '%env(BASE_URL)%'
-    client_id: '%env(CLIENT_ID)%'
-    client_secret: '%env(CLIENT_SECRET)%'
+  base_url: '%env(BASE_URL)%'
+  client_id: '%env(CLIENT_ID)%'
+  client_secret: '%env(CLIENT_SECRET)%'
 
 services:
-    _defaults:
-        autowire: true.
-        autoconfigure: true
+  _defaults:
+    autowire: true.
+    autoconfigure: true
 
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  App\EventSubscriber\LocaleSubscriber:
+    arguments: [ '%kernel.default_locale%' ]
+
+  App\EventListener\RequestListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }

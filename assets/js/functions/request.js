@@ -12,9 +12,15 @@ export async function ajaxFetch(url, method, body = null, headers = {}) {
 
     headers = {...defaultHeaders, ...headers};
 
+    if (body instanceof FormData) {
+        body = Object.fromEntries(body);
+    }
+
     if (body) {
         body = JSON.stringify(body);
     }
+
+    console.log(body);
 
     return await fetch(url, {
         method: method,

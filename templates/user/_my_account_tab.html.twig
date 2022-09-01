@@ -1,19 +1,31 @@
-<form method="post" id="validateAccountForm">
-    <div class="row">
+{{ form_start(userAccountForm, { 'attr': {'id': 'validateAccountForm'} }) }}
+
+    <div class="row mb-xl-3">
         <div class="col-xl-6">
-            <label for="firstName" class="form-label">Prénom</label>
-            <input type="text" class="form-control" id="firstName" value="" required=>
+            <label for="name" class="form-label">Prénom</label>
+            {{ form_widget(userAccountForm.firstname) }}
         </div>
         <div class="col-xl-6">
             <label for="firstName" class="form-label">Nom</label>
-            <input type="text" class="form-control" id="firstName" value="" required>
+            {{ form_widget(userAccountForm.lastname) }}
         </div>
     </div>
 
     <div class="row mb-xl-3">
         <div class="col">
-            <label for="firstName" class="form-label">E-mail</label>
-            <input type="email" class="form-control" id="firstName" value="{{ app.user.email }}" required>
+            <label for="email" class="form-label">E-mail</label>
+            {{ form_widget(userAccountForm.email) }}
+        </div>
+    </div>
+
+    <div class="row mb-xl-3">
+        <div class="col-xl-6">
+            <label for="locale" class="form-label">Language</label>
+            {{ form_widget(userAccountForm.language) }}
+        </div>
+        <div class="col-xl-6">
+            <label for="currency" class="form-label">Devise</label>
+            {{ form_widget(userAccountForm.currency) }}
         </div>
     </div>
 
@@ -22,4 +34,4 @@
             <button type="submit" class="btn btn-primary validate-account">Valider</button>
         </div>
     </div>
-</form>
+{{ form_end(userAccountForm) }}

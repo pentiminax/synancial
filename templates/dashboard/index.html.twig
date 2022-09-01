@@ -8,16 +8,16 @@
             <div class="col-xl-9">
                 <div class="row">
 
-                    {% include 'dashboard/_assets_card.html.twig' with {'id': 'total-wealth', 'label': 'Patrimoine brut' } %}
+                    {% include 'dashboard/_assets_card.html.twig' with {'id': 'total-wealth', 'label': 'dashboard.labels.total_wealth'|trans } %}
 
-                    {% include 'dashboard/_assets_card.html.twig' with {'id': 'net-worth', 'label': 'Patrimoine net' } %}
+                    {% include 'dashboard/_assets_card.html.twig' with {'id': 'net-worth', 'label': 'dashboard.labels.net_worth'|trans } %}
 
-                    {% include 'dashboard/_assets_card.html.twig' with {'id': 'financial-assets', 'label': 'Patrimoine financier' } %}
+                    {% include 'dashboard/_assets_card.html.twig' with {'id': 'financial-assets', 'label': 'dashboard.labels.financial_assets'|trans } %}
 
                     <div class="col-xl-6 mb-4">
                         <div class="card">
                             <div class="card-body">
-                                Allocation d'actifs
+                                {{ 'dashboard.labels.asset_allocation'|trans }}
                                 <div>
                                     <canvas id="allocationChart"></canvas>
                                 </div>

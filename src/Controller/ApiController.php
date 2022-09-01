@@ -18,6 +18,7 @@ use App\Service\ApiService;
 use App\Service\BudgetInsightApiService;
 use App\Service\ConnectionService;
 use App\Service\TimeSerieService;
+use App\Service\UserService;
 use App\Service\UserSessionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -48,6 +49,14 @@ class ApiController extends AbstractController
         return $this->json([
             'secretMode' => $user->isIsSecretModeEnabled()
         ]);
+    }
+
+    #[Route('/api/users/me', name: 'api_users_me_update', methods: ['PUT'])]
+    public function updateUser(Request $request, UserService $userService): Response
+    {
+        $userService->updateUser($request->getContent());
+
+        return $this->json(new ApiResponse());
     }
 
     #[Route('/api/users/me/accounts/{id}/transactions', name: 'api_users_me_accounts_transaction', methods: ['GET'])]

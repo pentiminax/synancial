@@ -1,0 +1,7 @@
+dashboard:
+  labels:
+    asset_allocation: Asset allocation
+    financial_assets: Financial assets
+    net_worth: Net worth
+    news: News
+    total_wealth: Total wealth

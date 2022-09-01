@@ -1,0 +1,7 @@
+dashboard:
+  labels:
+    asset_allocation: Allocation d'actifs
+    financial_assets: Patrimoine financier
+    net_worth: Patrimoine net
+    news: Actualités
+    total_wealth: Patrimoine brut

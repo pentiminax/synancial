@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2'
+import {ajaxFetch} from "./functions/request";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const settings = new Settings();
@@ -15,6 +16,8 @@ class Settings {
 
         validateAccountForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const response = await ajaxFetch('/api/users/me', 'PUT', new FormData(e.target));
 
             const Toast = Swal.mixin({
                 toast: true,
