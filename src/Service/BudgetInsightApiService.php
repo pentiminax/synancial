@@ -135,26 +135,16 @@ class BudgetInsightApiService
     /**
      * @return Transaction[]
      */
-    public function listTransactions(int $accountId, int $offset = 0, int $limit = 10, ?\DateTime $minDate = null, ?\DateTime $maxDate = null): array
+    public function listTransactions(int $accountId, int $offset = 0, int $limit = 10, string $period = "all"): array
     {
         $this->useBearerToken();
 
         $url = "users/me/accounts/$accountId/transactions";
 
-        $query = [
+        $this->options['query'] = [
             'offset' => $offset,
             'limit' => $limit
         ];
-
-        if ($minDate) {
-            $query['min_date'] = $minDate->format('Y-m-d');
-        }
-
-        if ($minDate) {
-            $query['max_date'] = $maxDate->format('Y-m-d');
-        }
-
-        $this->options['query'] = $query;
 
         $data = json_decode($this->request('GET', $url), true);
 

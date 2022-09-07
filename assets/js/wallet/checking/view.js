@@ -63,14 +63,14 @@ class CheckingView {
     yBarChartMin;
 
     constructor(accountId) {
+        this.accountId = accountId;
         this.loader = $('.loader');
         this.loadMoreTransactionsButton = $('.load-more-transactions-button');
-        this.accountId = accountId;
         this.listenSelectOperationType();
         this.listenSelectWording();
 
-        this.loadMoreTransactionsButton.addEventListener('click', async (e) => {
-            await this.loadMoreTransactions(this.offset, this.limit);
+        this.loadMoreTransactionsButton.addEventListener('click', async () => {
+            await this.loadMoreTransactions();
         });
     }
 
@@ -245,7 +245,7 @@ class CheckingView {
         );
     }
 
-    async loadMoreTransactions(offset, limit) {
+    async loadMoreTransactions() {
         this.showLoader();
 
         this.offset += 10;
@@ -261,16 +261,6 @@ class CheckingView {
         const json = await response.json();
 
         this.loadMoreTransactionsButton.parentElement.insertAdjacentHTML('beforebegin', json.result);
-    }
-
-    async getTransactions(page, limit) {
-        const response = await fetch('');
-
-        if (!response.ok) {
-            return;
-        }
-
-        return await response.json();
     }
 
     showLoader() {

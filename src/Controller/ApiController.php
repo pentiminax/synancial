@@ -62,7 +62,7 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/accounts/{id}/transactions', name: 'api_users_me_accounts_transaction', methods: ['GET'])]
     public function getTransactionsByAccount(int $id, Request $request): Response
     {
-        $transactions = $this->api->listTransactions($id, $request->get('offset', 0), $request->get('limit', 10));
+        $transactions = $this->api->listTransactions($id, $request->get('offset', 0), $request->get('limit', 10), $request->get('period'));
 
         return $this->json([
             'error' => 'null',
