@@ -24,9 +24,9 @@
                     </a>
 
                     <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                        {{ _self.navlink('Tableau de bord', 'dashboard') }}
-                        {{ _self.navlink('Portefeuille', 'wallet') }}
-                        {{ _self.navlink('A propos', 'about', '_blank') }}
+                        {{ _self.navlink('menu.dashboard'|trans, 'dashboard') }}
+                        {{ _self.navlink('menu.portfolio'|trans, 'wallet') }}
+                        {{ _self.navlink('menu.about'|trans, 'about', '_blank') }}
                     </ul>
 
                     <div class="col-md-3 text-end">
@@ -62,12 +62,12 @@
 
                             <div class="dropdown float-end">
                                 <a class="nav-link link-dark dropdown-toggle ms-2 mt-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Mon compte
+                                    {{ 'menu.my_account.title'|trans }}
                                 </a>
                                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
-                                    <li><a class="dropdown-item" href="{{ path('user_settings') }}">Paramètres</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('user_settings') }}">{{ 'menu.my_account.dropdown_items.parameters'|trans }}</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ path('logout') }}">Se déconnecter</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('logout') }}">{{ 'menu.my_account.dropdown_items.logout'|trans }}</a></li>
                                 </ul>
                             </div>
 

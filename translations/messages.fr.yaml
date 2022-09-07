@@ -5,3 +5,23 @@ dashboard:
     net_worth: Patrimoine net
     news: Actualités
     total_wealth: Patrimoine brut
+
+forms:
+  user_account:
+    labels:
+      firstname: Prénom
+      lastname: Nom
+      email: Email
+      language: Langage
+      currency: Devise
+
+menu:
+  dashboard: Tableau de bord
+  about: A propos
+  portfolio: Portefeuille
+
+  my_account:
+    title: Mon compte
+    dropdown_items:
+      parameters: Paramètres
+      logout: Se déconnecter

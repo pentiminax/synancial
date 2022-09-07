@@ -5,3 +5,23 @@ dashboard:
     net_worth: Net worth
     news: News
     total_wealth: Total wealth
+
+forms:
+  user_account:
+    labels:
+      firstname: First name
+      lastname: Last name
+      email: Email
+      language: Language
+      currency: Currency
+
+menu:
+  dashboard: Dashboard
+  portfolio: Portfolio
+  about: About
+
+  my_account:
+    title: My account
+    dropdown_items:
+      parameters: Settings
+      logout: Log Out

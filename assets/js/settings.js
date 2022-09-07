@@ -33,8 +33,11 @@ class Settings {
 
             await Toast.fire({
                 icon: 'success',
-                title: "C'est tout bon !"
+                title: "C'est tout bon !",
+                timer: 1000
             });
+
+            location.reload();
         })
     }
 

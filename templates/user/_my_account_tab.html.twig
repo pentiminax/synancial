@@ -2,29 +2,29 @@
 
     <div class="row mb-xl-3">
         <div class="col-xl-6">
-            <label for="name" class="form-label">Prénom</label>
+            <label for="name" class="form-label">{{ 'forms.user_account.labels.firstname'|trans }}</label>
             {{ form_widget(userAccountForm.firstname) }}
         </div>
         <div class="col-xl-6">
-            <label for="firstName" class="form-label">Nom</label>
+            <label for="firstName" class="form-label">{{ 'forms.user_account.labels.lastname'|trans }}</label>
             {{ form_widget(userAccountForm.lastname) }}
         </div>
     </div>
 
     <div class="row mb-xl-3">
         <div class="col">
-            <label for="email" class="form-label">E-mail</label>
+            <label for="email" class="form-label">{{ 'forms.user_account.labels.email'|trans }}</label>
             {{ form_widget(userAccountForm.email) }}
         </div>
     </div>
 
     <div class="row mb-xl-3">
         <div class="col-xl-6">
-            <label for="locale" class="form-label">Language</label>
+            <label for="locale" class="form-label">{{ 'forms.user_account.labels.language'|trans }}</label>
             {{ form_widget(userAccountForm.language) }}
         </div>
         <div class="col-xl-6">
-            <label for="currency" class="form-label">Devise</label>
+            <label for="currency" class="form-label">{{ 'forms.user_account.labels.currency'|trans }}</label>
             {{ form_widget(userAccountForm.currency) }}
         </div>
     </div>
