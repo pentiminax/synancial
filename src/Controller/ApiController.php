@@ -9,6 +9,7 @@ use App\Model\ApiResponse;
 use App\Model\Dashboard\DashboardData;
 use App\Model\Wallet\Checking\Account;
 use App\Model\Wallet\Checking\CheckingData;
+use App\Model\Wallet\Loans\LoansData;
 use App\Model\Wallet\Savings\SavingsData;
 use App\Model\Wallet\WalletData;
 use App\Repository\AccountTypeRepository;
@@ -119,7 +120,6 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/views/wallet/checking', name: 'api_users_me_views_wallet_checking', methods: ['GET'])]
     public function accounts(): Response
     {
-        $this->userSessionService->clear();
         $checkingData = $this->userSessionService->getCheckingData();
 
         if (!$checkingData) {
@@ -157,15 +157,56 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/users/me/views/wallet/market', name: 'api_users_me_views_wallet_market')]
-    public function marketView(AccountTypeRepository $accountTypeRepo, ConnectionRepository $connectionRepo): Response
+    public function marketView(): Response
     {
-        $accountType = $accountTypeRepo->findOneBy(['name' => AccountType::MARKET]);
-
         $result = $this->renderView('wallet/market/_investments_accordion.html.twig', [
-            'accounts' => $this->getUser()->getAccounts($accountType)
+            'accounts' => $this->api->listBankAccounts(AccountType::MARKET)
         ]);
 
         return $this->json(new ApiResponse(result: $result));
+    }
+
+    #[Route('/api/users/me/views/wallet/loans', name: 'api_users_me_views_wallet_loans')]
+    public function loansList(): Response
+    {
+        $loansData = $this->userSessionService->getLoansData();
+
+        if (!$loansData) {
+            $data = [];
+            $loanAccounts = $this->api->listBankAccounts(AccountType::LOAN);
+            $loansData = new LoansData();
+
+            $data['monthly'] = [
+                'repayment' => 0,
+                'capital' => 0
+            ];
+
+            foreach ($loanAccounts as $account) {
+                $loan = $account->loan;
+
+                $data['loans'][$account->id] = [
+                    'id' => $account->id,
+                    'name' => $account->name,
+                    'total_amount' => $loan['total_amount'],
+                    'balance' => abs($account->balance),
+                    'total_repayment' => $loan['total_amount'] - abs($account->balance),
+                    'repayment' => $loan['next_payment_amount']
+                ];
+
+                $data['monthly']['repayment'] += $loan['next_payment_amount'];
+                $data['monthly']['capital'] += $loan['next_payment_amount'];
+            }
+
+            $loansData->setData($data);
+        }
+
+        $loansList = $this->renderView('wallet/loans/_card_list.html.twig', [
+            'data' => $loansData->getData()
+        ]);
+
+
+        $result = [];
+        return $this->json(new ApiResponse(result: $loansList));
     }
 
     #[Route('/api/users/me/views/wallet/savings', name: 'api_users_me_views_wallet_savings')]

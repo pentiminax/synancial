@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emprunts | MyBudget{% endblock %}
+
+{% block body %}
+    <div class="container mb-5">
+
+        <div class="row">
+            <h2>
+                <a class="text-decoration-none text-dark" href="{{ path('wallet') }}">
+                    <i class="fas fa-long-arrow-alt-left"></i>
+                    Emprunts
+                </a>
+            </h2>
+
+            <div class="col-xl-6 offset-6 loans-accounts-list">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('loans_list') }}
+{% endblock %}

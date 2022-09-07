@@ -20,8 +20,6 @@ export async function ajaxFetch(url, method, body = null, headers = {}) {
         body = JSON.stringify(body);
     }
 
-    console.log(body);
-
     return await fetch(url, {
         method: method,
         body: body,

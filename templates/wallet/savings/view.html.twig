@@ -7,7 +7,11 @@
 
         <div class="row mb-3">
             <div class="col">
-                <h5>{{ account.name }} - {{ account.balance }} €</h5>
+                <a class="text-decoration-none text-dark" href="{{ path('wallet_savings_list') }}">
+                    <h2><i class="fas fa-long-arrow-alt-left"></i>
+                        {{ account.name }} - {{ account.balance }} €
+                    </h2>
+                </a>
             </div>
         </div>
 

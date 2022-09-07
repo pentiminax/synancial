@@ -62,5 +62,5 @@ class BankAccount
 
     public $information;
 
-    public $loan;
+    public ?array $loan;
 }

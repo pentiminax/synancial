@@ -77,6 +77,12 @@ class WalletController extends AbstractController
         return $this->render('wallet/market/index.html.twig');
     }
 
+    #[Route('/wallet/loans', name: 'wallet_loans')]
+    public function loans(): Response
+    {
+        return $this->render('wallet/loans/index.html.twig');
+    }
+
     #[Route('/wallet/add/{uuid}', name: 'wallet_add')]
     public function add(Connector $connector, BudgetInsightApiService $api): Response
     {

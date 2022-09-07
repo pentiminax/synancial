@@ -24,6 +24,7 @@ Encore
     .addEntry('checking_list', './assets/js/wallet/checking/list.js')
     .addEntry('checking_view', './assets/js/wallet/checking/view.js')
     .addEntry('dashboard', './assets/js/dashboard.js')
+    .addEntry('loans_list', './assets/js/wallet/loans/list.js')
     .addEntry('market_list', './assets/js/wallet/market/list.js')
     .addEntry('savings_list', './assets/js/wallet/savings/list.js')
     .addEntry('settings', './assets/js/settings.js')

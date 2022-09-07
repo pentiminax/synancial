@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class AccountType
 {
     const CHECKING = 'checking';
+    const LOAN = 'loan';
     const MARKET = 'market';
     const SAVINGS = 'savings';
 

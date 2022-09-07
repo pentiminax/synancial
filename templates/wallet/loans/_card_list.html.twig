@@ -1,0 +1,33 @@
+{% for key, loan in data.loans %}
+    <div class="accordion mb-3">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ key }}"
+                    aria-expanded="true" aria-controls="#collapse-{{ key }}">
+                {{ loan.name }}
+            </button>
+        </h2>
+        <div id="collapse-{{ key }}" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+                <table class="table table-hover savings-table" id="table-{{ key }}">
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Total remboursé</th>
+                        <th>Mensualité</th>
+                        <th>Capital restant dû</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="loans-account" data-id="{{ loan.id }}">
+                        <td>{{ loan.name }}</td>
+                        <td><span data-secret-mode="true">{{ loan.total_repayment }} €</span></td>
+                        <td><span data-secret-mode="true">{{ loan.repayment }} €</span></td>
+                        <td><span data-secret-mode="true">{{ loan.balance }} €</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endfor %}

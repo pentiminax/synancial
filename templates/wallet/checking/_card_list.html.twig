@@ -10,10 +10,11 @@
         <div id="collapse-{{ key }}" class="accordion-collapse collapse show">
             <div class="accordion-body">
                 <table class="table table-hover savings-table" id="table-{{ key }}">
-                    <tr>
-                        <th>Nom</th>
-                        <th>Solde</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Solde</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {% for account in bank.accounts %}
