@@ -42,6 +42,10 @@ class WalletController extends AbstractController
     {
         $account = $api->getBankAccount($id);
 
+        if (!$account) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         $timeSerieService->add($account->id, $account->balance);
 
         $transactions = $api->listTransactions($id);

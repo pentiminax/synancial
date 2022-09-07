@@ -90,13 +90,17 @@ class BudgetInsightApiService
         return $this->serializer->deserialize($data, PermanentUserAccessToken::class, 'json');
     }
 
-    public function getBankAccount(int $id): BankAccount
+    public function getBankAccount(int $id): ?BankAccount
     {
         $this->useBearerToken();
 
         $baseUrl = $this->parameters->get('base_url');
 
         $data = $this->request(Request::METHOD_GET, "$baseUrl/users/me/accounts/$id");
+
+        if (empty($data)) {
+            return null;
+        }
 
         return $this->serializer->deserialize($data, BankAccount::class, 'json');
     }
