@@ -14,6 +14,7 @@ class TwigExtension extends AbstractExtension
             new TwigFilter('diff_sign', [$this, 'formatDiffSign']),
             new TwigFilter('diff_class', [$this, 'formatDiffClass']),
             new TwigFilter('is_sync_button_disabled', [$this, 'isSyncButtonDisabled']),
+            new TwigFilter('simplifyWording', [$this, 'simplifyOriginalWording']),
         ];
     }
 
@@ -46,5 +47,12 @@ class TwigExtension extends AbstractExtension
         $now = (new \DateTime());
 
         return $lastSync->diff($now)->h < 1 && $lastSync->diff($now)->d < 1;
+    }
+
+    public function simplifyOriginalWording(string $originalWording): string
+    {
+        $simplifiedWording = preg_replace("/(\d+|\d+[a-zA-Z])/", '', $originalWording);
+
+        return str_replace('/', '', $simplifiedWording);
     }
 }
