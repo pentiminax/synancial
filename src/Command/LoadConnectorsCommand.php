@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LoadConnectorsCommand extends Command
 {
-    protected  static $defaultName = 'app:load-connectors';
+    protected static $defaultName = 'app:load-connectors';
 
     public function __construct(
         private readonly BudgetInsightApiService $api,

@@ -4,6 +4,8 @@ namespace App\Model;
 
 class Investment
 {
+    const CODE_TYPE_ISIN = 'ISIN';
+
     public int $id;
 
     public string $label;

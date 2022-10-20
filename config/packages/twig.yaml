@@ -3,6 +3,7 @@ twig:
     form_themes: ['bootstrap_5_horizontal_layout.html.twig']
     globals:
         budgetInsightApiService: '@App\Service\BudgetInsightApiService'
+        dividendService: '@App\Service\DividendService'
 
 when@test:
     twig:

@@ -18,6 +18,8 @@ framework:
         scoped_clients:
             budget_insight.client:
                 base_uri: 'https://pentiminax-sandbox.biapi.pro/2.0'
+            divvydiary.client:
+                base_uri: 'https://api.divvydiary.com'
 
 when@test:
     framework:

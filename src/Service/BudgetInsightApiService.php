@@ -186,6 +186,9 @@ class BudgetInsightApiService
 
     }
 
+    /**
+     * @return Investment[]
+     */
     public function listInvestmentsByAccount(int $id): array
     {
         $this->useBearerToken();

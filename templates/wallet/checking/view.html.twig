@@ -13,7 +13,9 @@
 
         <div class="row mb-3">
             <div class="col">
-                <h5>{{ account.name }} - {{ account.balance }} €</h5>
+                <a class="text-decoration-none text-dark" href="{{ path('wallet_checking_list') }}">
+                    <h3><i class="fas fa-long-arrow-alt-left"></i>&nbsp;{{ account.name }} - {{ account.balance }} €</h3>
+                </a>
             </div>
         </div>
 
@@ -98,7 +100,8 @@
                 <div class="text-center">
                     <button class="btn btn-primary load-more-transactions-button" type="button">
                         <span>Charger plus de résultats</span>
-                        <span class="d-none loader spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="d-none loader spinner-border spinner-border-sm" role="status"
+                              aria-hidden="true"></span>
                     </button>
                 </div>
             </div>

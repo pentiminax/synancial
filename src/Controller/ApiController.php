@@ -18,6 +18,7 @@ use App\Repository\ConnectorRepository;
 use App\Service\ApiService;
 use App\Service\BudgetInsightApiService;
 use App\Service\ConnectionService;
+use App\Service\DividendService;
 use App\Service\TimeSerieService;
 use App\Service\UserService;
 use App\Service\UserSessionService;
@@ -63,7 +64,11 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/accounts/{id}/transactions', name: 'api_users_me_accounts_transaction', methods: ['GET'])]
     public function getTransactionsByAccount(int $id, Request $request): Response
     {
-        $transactions = $this->api->listTransactions($id, $request->get('offset', 0), $request->get('limit', 10), $request->get('period'));
+        $offset = $request->query->getInt('offset');
+        $limit = $request->query->getInt('limit', 10);
+        $period = $request->query->getAlpha('period', 'all');
+
+        $transactions = $this->api->listTransactions($id, $offset, $limit, $period);
 
         return $this->json([
             'error' => 'null',
@@ -157,11 +162,32 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/users/me/views/wallet/market', name: 'api_users_me_views_wallet_market')]
-    public function marketView(): Response
+    public function marketView(DividendService $dividendService): Response
     {
-        $result = $this->renderView('wallet/market/_investments_accordion.html.twig', [
-            'accounts' => $this->api->listBankAccounts(AccountType::MARKET)
-        ]);
+        $accounts = $this->api->listBankAccounts(AccountType::MARKET);
+
+        $result = [
+            'investments' => ''
+        ];
+
+        $totalValue = 0;
+        $totalAnnualDividend = 0;
+
+        foreach ($accounts as $account) {
+            $investments = $this->api->listInvestmentsByAccount($account->id);
+            $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
+            $result['investments'] .= $this->renderView('wallet/market/_investments_accordion.html.twig', [
+                'account' => $account,
+                'investments' => $investments
+            ]);
+
+            foreach ($investments as $investment) {
+                $totalValue += $investment->unitvalue * $investment->quantity;
+            }
+        }
+
+        $result['totalAnnualDividend'] = $totalAnnualDividend;
+        $result['totalValue'] = round($totalValue);
 
         return $this->json(new ApiResponse(result: $result));
     }
