@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\User;
+use App\Model\Investment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -15,6 +16,8 @@ class TwigExtension extends AbstractExtension
             new TwigFilter('diff_class', [$this, 'formatDiffClass']),
             new TwigFilter('is_sync_button_disabled', [$this, 'isSyncButtonDisabled']),
             new TwigFilter('simplifyWording', [$this, 'simplifyOriginalWording']),
+            new TwigFilter('currency_performance', [$this, 'performanceInCurrency']),
+            new TwigFilter('percentage_performance', [$this, 'performanceInPercentage']),
         ];
     }
 
@@ -54,5 +57,15 @@ class TwigExtension extends AbstractExtension
         $simplifiedWording = preg_replace("/(\d+|\d+[a-zA-Z])/", '', $originalWording);
 
         return str_replace('/', '', $simplifiedWording);
+    }
+
+    public function performanceInCurrency(Investment $investment): float
+    {
+        return round(($investment->unitvalue * $investment->quantity) - ($investment->unitprice * $investment->quantity), 2);
+    }
+
+    public function performanceInPercentage(Investment $investment): float
+    {
+        return round(($investment->unitvalue - $investment->unitprice) / ($investment->unitprice / 100), 2);
     }
 }

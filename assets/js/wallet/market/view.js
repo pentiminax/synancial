@@ -99,6 +99,10 @@ class MarketView {
         );
     }
 
+    processCardTitle(value) {
+        return `<h2 class="card-title fw-bold text-primary"><span data-secret-mode="true">${value}</span></h2>`;
+    }
+
     legendPlugin = {
         id: 'legendPlugin',
         /**
@@ -149,9 +153,5 @@ class MarketView {
                 ul.appendChild(li);
             });
         }
-    }
-
-    processCardTitle(value) {
-        return `<h2 class="card-title fw-bold text-primary">${value}</h2>`;
     }
 }

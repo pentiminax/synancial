@@ -35,25 +35,20 @@
                                     <span data-secret-mode="true">{{ investment.quantity|round(2) }}</span>
                                 </td>
 
-                                <td data-sort="{{ investment.unitprice|round(2) }}">{{ investment.unitprice|round(2) }} {{ sign }}</td>
+                                <td data-sort="{{ investment.unitvalue|round(2) }}">{{ investment.unitvalue|round(2) }} {{ sign }}</td>
 
                                 <td data-sort="{{ investment.valuation|round(2) }}">
                                     <span data-secret-mode="true">{{ investment.valuation|round(2) }} {{ sign }}</span>
                                 </td>
 
-                                {% if investment.prev_diff %}
-                                    <td class="fw-bold" data-sort="{{ investment.prev_diff|round }}">
-                                        <span class="{{ investment.prev_diff|diff_class }}"
-                                              data-secret-mode="true">
-                                            {{ investment.prev_diff|round(2)|diff_sign }} {{ sign }}
+                                <td class="fw-bold" data-sort="{{ investment|currency_performance }}">
+                                        <span class="{{ investment|currency_performance|diff_class }}" data-secret-mode="true">
+                                            {{ investment|currency_performance }} {{ sign }}
                                         </span>
-                                        <div class="{{ investment.prev_diff|diff_class }}">
-                                            <small>{{ investment.prev_diff_percent|round(2)|diff_sign }} %</small>
-                                        </div>
-                                    </td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
+                                    <div class="{{ investment|percentage_performance|diff_class }}">
+                                        <small>{{ investment|percentage_performance }} %</small>
+                                    </div>
+                                </td>
 
                             </tr>
                         {% endif %}
