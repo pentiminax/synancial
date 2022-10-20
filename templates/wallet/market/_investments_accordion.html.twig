@@ -9,7 +9,11 @@
         </h2>
         <div id="collapse-{{ account.id }}" class="accordion-collapse collapse show">
             <div class="accordion-body">
-                <a class="text-decoration-none float-end" href="{{ path('wallet_market_view', { id: account.id }) }}">Voir plus <i class="fas fa-long-arrow-alt-right"></i></a>
+
+                {% if isView is not defined %}
+                    <a class="text-decoration-none float-end" href="{{ path('wallet_market_view', { id: account.id }) }}">Voir plus <i class="fas fa-long-arrow-alt-right"></i></a>
+                {% endif %}
+
                 <table class="table table-hover market-table" id="table-{{ account.id }}">
                     <thead>
                     <tr>

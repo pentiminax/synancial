@@ -191,7 +191,8 @@ class ApiController extends AbstractController
 
         $result['investments'] .= $this->renderView('wallet/market/_investments_accordion.html.twig', [
             'account' => $account,
-            'investments' => $investments
+            'investments' => $investments,
+            'isView' => true
         ]);
 
         if (AccountType::MARKET === $account->type) {

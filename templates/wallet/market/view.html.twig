@@ -46,23 +46,31 @@
         {% endif %}
 
         <div class="row">
-            <div class="col-xl-5">
+
+            <div class="col-xl-5 mb-sm-3">
                 <div class="card">
                     <div class="card-header">
                         Distribution (<span class="number-of-assets">0</span> actifs)
                     </div>
                     <div class="card-body">
-                       <div>
-                           <canvas id="distributionChart"></canvas>
-                       </div>
+                        <div class="row">
+                            <div class="col-xl-6 p-0">
+                                <canvas class="distribution-chart"></canvas>
+                            </div>
+                            <div class="col-xl-6 p-0">
+                                <ul class="distribution-chart-legend"></ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-7 market-area">
                 <div class="d-flex justify-content-center">
                     {% include 'partials/_loading_indicator.html.twig' %}
                 </div>
             </div>
+
         </div>
 
     </div>

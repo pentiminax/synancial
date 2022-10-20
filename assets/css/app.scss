@@ -55,3 +55,9 @@ body.secret-mode {
   cursor: pointer;
   @extend .bg-light;
 }
+
+
+.distribution-chart-legend {
+  height: 325px;
+  overflow-y: auto;
+}

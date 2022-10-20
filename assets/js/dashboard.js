@@ -2,7 +2,6 @@ import {Chart, registerables} from "chart.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const dashboard = new Dashboard();
-    Chart.defaults.plugins.legend.display = false;
     Chart.register(...registerables);
 
     await dashboard.fetchUserAccounts();
