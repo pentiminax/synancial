@@ -1,3 +1,5 @@
+{% set sign = app.user.currency.sign %}
+
 {% for key, loan in data.loans %}
     <div class="accordion mb-3">
     <div class="accordion-item">
@@ -21,9 +23,9 @@
                     <tbody>
                     <tr class="loans-account" data-id="{{ loan.id }}">
                         <td>{{ loan.name }}</td>
-                        <td><span data-secret-mode="true">{{ loan.total_repayment }} €</span></td>
-                        <td><span data-secret-mode="true">{{ loan.repayment }} €</span></td>
-                        <td><span data-secret-mode="true">{{ loan.balance }} €</span></td>
+                        <td><span data-secret-mode="true">{{ loan.total_repayment }} {{ sign }}</span></td>
+                        <td><span data-secret-mode="true">{{ loan.repayment }} {{ sign }}</span></td>
+                        <td><span data-secret-mode="true">{{ loan.balance }} {{ sign }}</span></td>
                     </tr>
                     </tbody>
                 </table>

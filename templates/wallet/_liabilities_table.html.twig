@@ -14,7 +14,7 @@
             </a>
         </td>
         <td>{{ liabilities.loan.share|round }} %</td>
-        <td><span data-secret-mode="true">{{ liabilities.loan.amount|round }} €</span></td>
+        <td><span data-secret-mode="true">{{ liabilities.loan.amount|round }} {{ app.user.currency.sign }}</span></td>
     </tr>
     </tbody>
 </table>

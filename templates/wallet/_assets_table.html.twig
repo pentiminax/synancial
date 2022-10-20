@@ -1,3 +1,5 @@
+{% set sign = app.user.currency.sign %}
+
 <table class="table table-striped table-hover">
     <thead>
     <tr>
@@ -13,17 +15,17 @@
                 <b>Comptes bancaires <i class="fas fa-long-arrow-alt-right"></i></b>
             </a>
         </td>
-        <td>{{ assets.checking.share|round }} %</td>
-        <td><span data-secret-mode="true">{{ assets.checking.amount|round }} €</span></td>
+        <td class="fw-bold">{{ assets.checking.share|round }} %</td>
+        <td><span class="fw-bold" data-secret-mode="true">{{ assets.checking.amount|round }} {{ sign }}</span></td>
     </tr>
     <tr>
         <td>
-            <a class="text-dark text-decoration-none" href="{{ path('wallet_market') }}">
+            <a class="text-dark text-decoration-none" href="{{ path('wallet_market_list') }}">
                 <b>Comptes d'investissements <i class="fas fa-long-arrow-alt-right"></i></b>
             </a>
         </td>
-        <td>{{ assets.market.share|round }} %</td>
-        <td><span data-secret-mode="true">{{ assets.market.amount|round }} €</span></td>
+        <td class="fw-bold">{{ assets.market.share|round }} %</td>
+        <td><span class="fw-bold" data-secret-mode="true">{{ assets.market.amount|round }} {{ sign }}</span></td>
     </tr>
     <tr>
         <td>
@@ -31,8 +33,8 @@
                 <b>Livrets <i class="fas fa-long-arrow-alt-right"></i></b>
             </a>
         </td>
-        <td>{{ assets.savings.share|round }} %</td>
-        <td><span data-secret-mode="true">{{ assets.savings.amount|round }} €</span></td>
+        <td class="fw-bold">{{ assets.savings.share|round }} %</td>
+        <td><span class="fw-bold" data-secret-mode="true">{{ assets.savings.amount|round }} {{ sign }}</span></td>
     </tr>
     </tbody>
 </table>

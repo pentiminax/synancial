@@ -7,13 +7,10 @@ use App\Entity\Connection;
 use App\Entity\User;
 use App\Model\ApiResponse;
 use App\Model\Dashboard\DashboardData;
-use App\Model\Wallet\Checking\Account;
 use App\Model\Wallet\Checking\CheckingData;
 use App\Model\Wallet\Loans\LoansData;
 use App\Model\Wallet\Savings\SavingsData;
 use App\Model\Wallet\WalletData;
-use App\Repository\AccountTypeRepository;
-use App\Repository\ConnectionRepository;
 use App\Repository\ConnectorRepository;
 use App\Service\ApiService;
 use App\Service\BudgetInsightApiService;
@@ -106,17 +103,13 @@ class ApiController extends AbstractController
             $this->userSessionService->setWalletData($walletData);
         }
 
-        $assetsTable = $this->renderView('wallet/_assets_table.html.twig', [
-            'assets' => $walletData->getDistribution()->getAssets()
-        ]);
-
-        $liabilitiesTable = $this->renderView('wallet/_liabilities_table.html.twig', [
-            'liabilities' => $walletData->getDistribution()->getLiabilities()
-        ]);
-
         $walletData = [
-            'assets' => $assetsTable,
-            'liabilities' => $liabilitiesTable
+            'assets' => $this->renderView('wallet/_assets_table.html.twig', [
+                'assets' => $walletData->getDistribution()->getAssets()
+            ]),
+            'liabilities' => $this->renderView('wallet/_liabilities_table.html.twig', [
+                'liabilities' => $walletData->getDistribution()->getLiabilities()
+            ])
         ];
 
         return $this->json(new ApiResponse(result: $walletData));
@@ -161,34 +154,61 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $accountsList));
     }
 
-    #[Route('/api/users/me/views/wallet/market', name: 'api_users_me_views_wallet_market')]
-    public function marketView(DividendService $dividendService): Response
+    #[Route('/api/users/me/views/wallet/market', name: 'api_wallet_market_list')]
+    public function marketList(): Response
     {
         $accounts = $this->api->listBankAccounts([AccountType::MARKET, AccountType::LIFEINSURANCE]);
 
-        $result = [
-            'investments' => ''
+        $result['investments'] = '';
+
+        foreach ($accounts as $account) {
+            $result['investments'] .= $this->renderView('wallet/market/_investments_accordion.html.twig', [
+                'account' => $account,
+                'investments' =>  $this->api->listInvestmentsByAccount($account->id)
+            ]);
+        }
+
+        return $this->json(new ApiResponse(result: $result));
+    }
+
+    #[Route('/api/users/me/views/wallet/market/{id}', name: 'api_wallet_market_view')]
+    public function marketView(int $id, DividendService $dividendService): Response
+    {
+        $account = $this->api->getBankAccount($id);
+
+        $result['investments'] = '';
+        $result['distribution'] = [
+            'datasets' => [
+                'data' => []
+            ],
+            'labels' => []
         ];
 
         $totalValue = 0;
         $totalAnnualDividend = 0;
 
-        foreach ($accounts as $account) {
-            $investments = $this->api->listInvestmentsByAccount($account->id);
-            $result['investments'] .= $this->renderView('wallet/market/_investments_accordion.html.twig', [
-                'account' => $account,
-                'investments' => $investments
-            ]);
-            if (AccountType::MARKET === $account->type) {
-                $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
-                foreach ($investments as $investment) {
-                    $totalValue += $investment->unitvalue * $investment->quantity;
-                }
+        $investments = $this->api->listInvestmentsByAccount($account->id);
+
+        $result['investments'] .= $this->renderView('wallet/market/_investments_accordion.html.twig', [
+            'account' => $account,
+            'investments' => $investments
+        ]);
+
+        if (AccountType::MARKET === $account->type) {
+            $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
+            foreach ($investments as $investment) {
+                $totalValue += $investment->unitvalue * $investment->quantity;
+            }
+
+            foreach ($investments as $investment) {
+                $result['distribution']['labels'][] = $investment->label;
+                $result['distribution']['datasets']['data'][] = round((($investment->unitvalue * $investment->quantity) / $totalValue) * 100);
             }
         }
 
         $result['totalAnnualDividend'] = $totalAnnualDividend;
         $result['totalValue'] = round($totalValue);
+        $result['numberOfAssets'] = count($result['distribution']['datasets']['data']);
 
         return $this->json(new ApiResponse(result: $result));
     }
@@ -356,12 +376,6 @@ class ApiController extends AbstractController
             'message' => 'OK',
             'result' => []
         ]);
-    }
-
-    #[Route('/api/users/me/sync_status', name: 'api_users_me_sync_status', methods: ['GET'])]
-    public function syncStatus()
-    {
-        $connections = $this->api->listConnections();
     }
 
     #[Route('/api/users/me/investments', name: 'api_users_me_investments', methods: ['GET'])]

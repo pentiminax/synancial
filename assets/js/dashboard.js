@@ -2,7 +2,7 @@ import {Chart, registerables} from "chart.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const dashboard = new Dashboard();
-
+    Chart.defaults.plugins.legend.display = false;
     Chart.register(...registerables);
 
     await dashboard.fetchUserAccounts();
@@ -71,7 +71,7 @@ class Dashboard {
             }]
         };
 
-        const allocationChart = new Chart(
+        new Chart(
             document.querySelector('#allocationChart'), {
                 type: 'doughnut',
                 data: data,
@@ -79,6 +79,9 @@ class Dashboard {
                     cutout: 150,
                     responsive: true,
                     plugins: {
+                        legend: {
+                            display: false
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function (context) {

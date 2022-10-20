@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Se connecter</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<header class="my-4">
+    <h5 class="fw-bold text-center">My Budget</h5>
+</header>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-4 offset-xl-4">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h2 class="card-title fw-bold">Se connecter</h2>
+                    <span class="text-muted">Vous n'avez pas encore de compte ?</span>
+                    <p><a class="text-decoration-none" href="{{ path('security_register') }}"><b>Inscrivez-vous.</b></a></p>
+
+                    <form method="post">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="username" name="_username" autocomplete="username" required>
+                            <label for="username">Adresse e-mail</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" name="_password" placeholder="Mot de passe" autocomplete="password" required>
+                            <label for="password">Mot de passe</label>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <button class="btn btn-lg btn-primary rounded-5 w-100" type="submit">Se connecter</button>
+
+                        {% if error is not null %}
+                            <p class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                        {% endif %}
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

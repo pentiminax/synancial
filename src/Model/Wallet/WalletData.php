@@ -3,11 +3,12 @@
 namespace App\Model\Wallet;
 
 use App\Model\Asset;
+use App\Model\DataInterface;
 use App\Model\Distribution;
 use App\Model\TimestampedInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class WalletData implements TimestampedInterface
+class WalletData implements DataInterface, TimestampedInterface
 {
     private Distribution $distribution;
 

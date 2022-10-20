@@ -17,6 +17,7 @@ Encore
     .addEntry('dashboard', './assets/js/dashboard.js')
     .addEntry('loans_list', './assets/js/wallet/loans/list.js')
     .addEntry('market_list', './assets/js/wallet/market/list.js')
+    .addEntry('market_view', './assets/js/wallet/market/view.js')
     .addEntry('savings_list', './assets/js/wallet/savings/list.js')
     .addEntry('settings', './assets/js/settings.js')
     .addEntry('wallet', './assets/js/wallet.js')
@@ -32,7 +33,6 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
 
     .configureBabel((config) => {

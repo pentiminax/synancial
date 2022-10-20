@@ -1,6 +1,6 @@
 /**
  * @param {string} selector
- * @return {HTMLElement}
+ * @return {HTMLElement|undefined}
  */
 export function $(selector) {
     return document.querySelector(selector);

@@ -15,17 +15,6 @@ class MarketList {
 
         const json = await response.json();
 
-        const totalValue = json.result['totalValue'];
-        const totalAnnualDividend = json.result['totalAnnualDividend'];
-        const totalDividendYield = Number((totalAnnualDividend / totalValue) * 100).toFixed(2);
-
         $('.market-area').innerHTML = json.result['investments'];
-        $('.total-value').innerHTML = this.processCardTitle(`~ ${json.result['totalValue']} €`);
-        $('.total-annual-dividend').innerHTML = this.processCardTitle(`~ ${json.result['totalAnnualDividend']} €`);
-        $('.total-dividend-yield').innerHTML = this.processCardTitle(`${totalDividendYield} %`);
-    }
-    
-    processCardTitle(value) {
-        return `<h2 class="card-title fw-bold text-primary">${value}</h2>`;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Currency;
 use App\Entity\Language;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,11 +23,13 @@ class UserAccountType extends AbstractType
             ->add('language', EntityType::class, [
                 'class' => Language::class
             ])
-            ->add('currency', ChoiceType::class)
+            ->add('currency', EntityType::class, [
+                'class' => Currency::class
+            ])
             ->add('email', EmailType::class);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return "";
     }

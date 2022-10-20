@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ account.name }} | MyBudget{% endblock %}
+{% block title %}{{ account.name }}{% endblock %}
 
 {% block body %}
     <div class="container mb-5">
@@ -14,7 +14,7 @@
         <div class="row mb-3">
             <div class="col">
                 <a class="text-decoration-none text-dark" href="{{ path('wallet_checking_list') }}">
-                    <h3><i class="fas fa-long-arrow-alt-left"></i>&nbsp;{{ account.name }} - {{ account.balance }} €</h3>
+                    <h3><i class="fas fa-long-arrow-alt-left"></i>&nbsp;{{ account.name }} - {{ account.balance }} {{ app.user.currency.sign }}</h3>
                 </a>
             </div>
         </div>

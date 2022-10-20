@@ -1,3 +1,5 @@
+{% set sign = app.user.currency.sign %}
+
 <div class="accordion mb-3">
     <div class="accordion-item">
         <h2 class="accordion-header">
@@ -7,6 +9,7 @@
         </h2>
         <div id="collapse-{{ account.id }}" class="accordion-collapse collapse show">
             <div class="accordion-body">
+                <a class="text-decoration-none float-end" href="{{ path('wallet_market_view', { id: account.id }) }}">Voir plus <i class="fas fa-long-arrow-alt-right"></i></a>
                 <table class="table table-hover market-table" id="table-{{ account.id }}">
                     <thead>
                     <tr>
@@ -28,17 +31,17 @@
                                     <span data-secret-mode="true">{{ investment.quantity|round(2) }}</span>
                                 </td>
 
-                                <td data-sort="{{ investment.unitprice|round(2) }}">{{ investment.unitprice|round(2) }} €</td>
+                                <td data-sort="{{ investment.unitprice|round(2) }}">{{ investment.unitprice|round(2) }} {{ sign }}</td>
 
                                 <td data-sort="{{ investment.valuation|round(2) }}">
-                                    <span data-secret-mode="true">{{ investment.valuation|round(2) }} €</span>
+                                    <span data-secret-mode="true">{{ investment.valuation|round(2) }} {{ sign }}</span>
                                 </td>
 
                                 {% if investment.prev_diff %}
                                     <td class="fw-bold" data-sort="{{ investment.prev_diff|round }}">
                                         <span class="{{ investment.prev_diff|diff_class }}"
                                               data-secret-mode="true">
-                                            {{ investment.prev_diff|round(2)|diff_sign }} €
+                                            {{ investment.prev_diff|round(2)|diff_sign }} {{ sign }}
                                         </span>
                                         <div class="{{ investment.prev_diff|diff_class }}">
                                             <small>{{ investment.prev_diff_percent|round(2)|diff_sign }} %</small>

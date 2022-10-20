@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ account.name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row mb-3">
+            <h2>
+                <a class="text-decoration-none text-dark" href="{{ path('wallet_market_list') }}">
+                    <i class="fas fa-long-arrow-alt-left"></i>
+                    {{ account.name }}
+                </a>
+            </h2>
+        </div>
+
+        {% if constant('App\\Entity\\AccountType::MARKET') == account.type %}
+        <div class="row mb-3">
+            <div class="card-group">
+                <div class="card text-center">
+                    <div class="card-header">Valeur totale</div>
+                    <div class="card-body total-value">
+                        <div class="d-flex justify-content-center">
+                            {% include 'partials/_loading_indicator.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-header">Total dividendes annuel</div>
+                    <div class="card-body total-annual-dividend">
+                        <div class="d-flex justify-content-center">
+                            {% include 'partials/_loading_indicator.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-header">Rendement total des dividendes</div>
+                    <div class="card-body total-dividend-yield">
+                        <div class="d-flex justify-content-center">
+                            {% include 'partials/_loading_indicator.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-xl-5">
+                <div class="card">
+                    <div class="card-header">
+                        Distribution (<span class="number-of-assets">0</span> actifs)
+                    </div>
+                    <div class="card-body">
+                       <div>
+                           <canvas id="distributionChart"></canvas>
+                       </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-7 market-area">
+                <div class="d-flex justify-content-center">
+                    {% include 'partials/_loading_indicator.html.twig' %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="application-data" data-account-id="{{ account.id }}" data-account-type="{{ account.type }}"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('market_view') }}
+{% endblock %}

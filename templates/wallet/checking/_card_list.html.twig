@@ -20,7 +20,7 @@
                     {% for account in bank.accounts %}
                         <tr class="{{ account.type }}-account" data-id="{{ account.id }}">
                             <td>{{ account.name }}</td>
-                            <td><span data-secret-mode="true">{{ account.balance }} €</span></td>
+                            <td><span data-secret-mode="true">{{ account.balance }} {{ app.user.currency.sign }}</span></td>
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -3,11 +3,12 @@
 namespace App\Model\Dashboard;
 
 use App\Model\Asset;
+use App\Model\DataInterface;
 use App\Model\Distribution;
 use App\Model\TimestampedInterface;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class DashboardData implements TimestampedInterface
+class DashboardData implements DataInterface, TimestampedInterface
 {
     private Distribution $distribution;
 
