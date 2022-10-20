@@ -108,7 +108,7 @@ class BudgetInsightApiService
     /**
      * @return BankAccount[]
      */
-    public function listBankAccounts(?string $type = null): array
+    public function listBankAccounts(?array $types = null): array
     {
         $response = [];
 
@@ -119,12 +119,12 @@ class BudgetInsightApiService
         /** @var BankAccount[] $accounts */
         $accounts = $this->serializer->deserialize(json_encode($data['accounts']), 'App\Model\BankAccount[]', 'json');
 
-        if (!$type) {
+        if (!$types) {
             return $accounts;
         }
 
         foreach ($accounts as $account) {
-            if ($account->type === $type) {
+            if(in_array($account->type, $types)) {
                 $response[] = $account;
             }
         }

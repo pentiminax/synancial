@@ -130,7 +130,7 @@ class ApiController extends AbstractController
         if (!$checkingData) {
             $checkingData = new CheckingData();
             $data = [];
-            $bankAccounts = $this->api->listBankAccounts(AccountType::CHECKING);
+            $bankAccounts = $this->api->listBankAccounts([AccountType::CHECKING]);
 
             foreach ($bankAccounts as $bankAccount) {
                 $connection = $this->getUser()->findConnection($bankAccount->id_connection);
@@ -164,7 +164,7 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/views/wallet/market', name: 'api_users_me_views_wallet_market')]
     public function marketView(DividendService $dividendService): Response
     {
-        $accounts = $this->api->listBankAccounts(AccountType::MARKET);
+        $accounts = $this->api->listBankAccounts([AccountType::MARKET, AccountType::LIFEINSURANCE]);
 
         $result = [
             'investments' => ''
@@ -175,14 +175,15 @@ class ApiController extends AbstractController
 
         foreach ($accounts as $account) {
             $investments = $this->api->listInvestmentsByAccount($account->id);
-            $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
             $result['investments'] .= $this->renderView('wallet/market/_investments_accordion.html.twig', [
                 'account' => $account,
                 'investments' => $investments
             ]);
-
-            foreach ($investments as $investment) {
-                $totalValue += $investment->unitvalue * $investment->quantity;
+            if (AccountType::MARKET === $account->type) {
+                $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
+                foreach ($investments as $investment) {
+                    $totalValue += $investment->unitvalue * $investment->quantity;
+                }
             }
         }
 
@@ -199,7 +200,7 @@ class ApiController extends AbstractController
 
         if (!$loansData) {
             $data = [];
-            $loanAccounts = $this->api->listBankAccounts(AccountType::LOAN);
+            $loanAccounts = $this->api->listBankAccounts([AccountType::LOAN]);
             $loansData = new LoansData();
 
             $data['monthly'] = [
@@ -243,7 +244,7 @@ class ApiController extends AbstractController
         if (!$savingsData) {
             $savingsData = new SavingsData();
             $data = [];
-            $savingsAccount = $this->api->listBankAccounts(AccountType::SAVINGS);
+            $savingsAccount = $this->api->listBankAccounts([AccountType::SAVINGS]);
 
             foreach ($savingsAccount as $savingAccount) {
                 $connection = $this->getUser()->findConnection($savingAccount->id_connection);
