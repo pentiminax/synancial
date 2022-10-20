@@ -21,7 +21,7 @@
                     <div class="card-header">Valeur totale</div>
                     <div class="card-body total-value">
                         <div class="d-flex justify-content-center">
-                            {% include 'partials/_loading_indicator.html.twig' %}
+                            {% include 'partials/_loading_indicator.html.twig' with {color: 'primary', type: 'spinner-grow'} %}
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     <div class="card-header">Total dividendes annuel</div>
                     <div class="card-body total-annual-dividend">
                         <div class="d-flex justify-content-center">
-                            {% include 'partials/_loading_indicator.html.twig' %}
+                            {% include 'partials/_loading_indicator.html.twig' with {color: 'primary', type: 'spinner-grow'} %}
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     <div class="card-header">Rendement total des dividendes</div>
                     <div class="card-body total-dividend-yield">
                         <div class="d-flex justify-content-center">
-                            {% include 'partials/_loading_indicator.html.twig' %}
+                            {% include 'partials/_loading_indicator.html.twig' with {color: 'primary', type: 'spinner-grow'} %}
                         </div>
                     </div>
                 </div>

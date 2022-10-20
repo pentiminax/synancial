@@ -1,4 +1,18 @@
-<span class="spinner {% if display is defined and not display %}d-none{% endif %} {% if customClass is defined %}{{ customClass }}{% endif %}">
-    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+{% set class = 'spinner' %}
+
+{% if additionalClass is defined %}
+    {% set class = class ~ ' ' ~ additionalClass %}
+{% endif %}
+
+{% if color is not defined %}
+    {% set color = 'dark' %}
+{% endif %}
+
+{% if type is not defined %}
+    {% set type = 'spinner-border' %}
+{% endif %}
+
+<span class="{{ class }} {% if display is defined and not display %}d-none{% endif %}">
+    <span class="{{ type}} text-{{ color }}" role="status"></span>
     <span class="visually-hidden">Loading...</span>
 </span>
