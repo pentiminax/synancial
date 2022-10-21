@@ -11,7 +11,7 @@
             <div class="accordion-body">
 
                 {% if isView is not defined %}
-                    <a class="text-decoration-none float-end" href="{{ path('wallet_market_view', { id: account.id }) }}">Voir plus <i class="fas fa-long-arrow-alt-right"></i></a>
+                    <a class="text-decoration-none float-end mb-3" href="{{ path('wallet_market_view', { id: account.id }) }}">Voir plus <i class="fas fa-long-arrow-alt-right"></i></a>
                 {% endif %}
 
                 <table class="table table-hover market-table" id="table-{{ account.id }}">
