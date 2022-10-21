@@ -46,7 +46,7 @@
 
                             <button class="btn btn-outline-primary {{ syncButtonClass }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ syncButtonTitle }}">
                                 <i class="fas fa-sync"></i>
-                                {% include 'partials/_loading_indicator.html.twig' with {display: false} %}
+                                {% include 'partials/_loading_indicator.html.twig' with {color: 'primary', display: false, sm: true} %}
                             </button>
 
                             <button class="btn btn-outline-primary secret-mode-button">

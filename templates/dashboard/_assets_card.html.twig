@@ -1,12 +1,14 @@
-<div class="col-xl-4 mb-4">
-    <div class="card bg-light">
-        <div class="card-body">
-            <h5 class="card-title">{{ label }}</h5>
-            <div class="card-text">
-                <span class="{{ id }} h5" data-secret-mode="true">
-                    {% include 'partials/_loading_indicator.html.twig' %}
-                </span>
-            </div>
+<div class="card bg-light text-center">
+    <div class="card-header">
+        {{ label }}
+    </div>
+    <div class="card-body">
+        <div class="card-text">
+                <h2 class="card-title fw-bold text-primary {{ class }}">
+                    <span data-secret-mode="true">
+                        {% include 'partials/_loading_indicator.html.twig' with {color: 'primary', type: 'spinner-grow'} %}
+                    </span>
+                </h2>
         </div>
     </div>
 </div>

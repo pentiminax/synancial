@@ -79,12 +79,15 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/views/dashboard', name: 'api_users_me_views_dashboard')]
     public function dashboard(ApiService $apiService): Response
     {
+        if (!$this->getUser()->getBearerToken()) {
+            return $this->redirectToRoute('security_logout');
+        }
+
         $dashboardData = $this->userSessionService->getDashboardData();
 
-        if (!$dashboardData && $this->getUser()->getBearerToken()) {
+        if (!$dashboardData) {
             $dashboardData = new DashboardData();
-            $bankAccounts = $this->api->listBankAccounts();
-            $apiService->aggregateAssetsAccounts($dashboardData, $bankAccounts);
+            $apiService->aggregateAssetsAccounts($dashboardData, $this->api->listBankAccounts());
             $this->userSessionService->setDashboardData($dashboardData);
         }
 
@@ -157,7 +160,7 @@ class ApiController extends AbstractController
     #[Route('/api/users/me/views/wallet/market', name: 'api_wallet_market_list')]
     public function marketList(): Response
     {
-        $accounts = $this->api->listBankAccounts([AccountType::MARKET, AccountType::LIFEINSURANCE]);
+        $accounts = $this->api->listBankAccounts([AccountType::MARKET, AccountType::LIFEINSURANCE], true);
 
         $result['investments'] = '';
 

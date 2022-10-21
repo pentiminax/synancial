@@ -135,11 +135,11 @@ class BudgetInsightApiService
     /**
      * @return Transaction[]
      */
-    public function listTransactions(int $accountId, int $offset = 0, int $limit = 10, string $period = "all"): array
+    public function listTransactions(?int $accountId = null, int $offset = 0, int $limit = 10, string $period = "all"): array
     {
         $this->useBearerToken();
 
-        $url = "users/me/accounts/$accountId/transactions";
+        $url = (null === $accountId) ? "users/me/transactions" : "users/me/accounts/$accountId/transactions";
 
         $this->options['query'] = [
             'offset' => $offset,

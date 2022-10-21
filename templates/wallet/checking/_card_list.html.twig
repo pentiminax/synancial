@@ -1,30 +1,31 @@
 {% for key, bank in banks %}
     <div class="accordion mb-3">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ key }}"
-                    aria-expanded="true" aria-controls="#collapse-{{ key }}">
-                {{ bank.name }}
-            </button>
-        </h2>
-        <div id="collapse-{{ key }}" class="accordion-collapse collapse show">
-            <div class="accordion-body">
-                <table class="table table-hover savings-table" id="table-{{ key }}">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Solde</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for account in bank.accounts %}
-                        <tr class="{{ account.type }}-account" data-id="{{ account.id }}">
-                            <td>{{ account.name }}</td>
-                            <td><span data-secret-mode="true">{{ account.balance }} {{ app.user.currency.sign }}</span></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ key }}"
+                        aria-expanded="true" aria-controls="#collapse-{{ key }}">
+                    {{ bank.name }}
+                </button>
+            </h2>
+            <div id="collapse-{{ key }}" class="accordion-collapse collapse show mb-3">
+                <div class="accordion-body">
+                    <table class="table table-hover savings-table" id="table-{{ key }}">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Solde</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for account in bank.accounts %}
+                            <tr class="{{ account.type }}-account" data-id="{{ account.id }}">
+                                <td>{{ account.name }}</td>
+                                <td><span data-secret-mode="true">{{ account.balance }} {{ app.user.currency.sign }}</span></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

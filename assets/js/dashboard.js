@@ -1,11 +1,13 @@
 import {Chart, registerables} from "chart.js";
+import {$} from "./functions/dom";
+import {ajaxFetch} from "./functions/request";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const dashboard = new Dashboard();
+
     Chart.register(...registerables);
 
-    await dashboard.fetchUserAccounts();
-    await dashboard.loadAllocationChart();
+    await dashboard.initialize();
 });
 
 class Dashboard {
@@ -17,13 +19,15 @@ class Dashboard {
     netWorth;
     financialAssets;
 
-    async fetchUserAccounts() {
-        const response = await fetch('/api/users/me/views/dashboard', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            method: 'GET'
-        });
+    async fetchFortuneoNews() {
+        const response = await ajaxFetch('/api/fortuneo/news');
+        const json = await response.json();
+
+        return json.result;
+    }
+
+    async initialize() {
+        const response = await ajaxFetch('/api/users/me/views/dashboard');
 
         const json = await response.json();
 
@@ -31,21 +35,24 @@ class Dashboard {
             return;
         }
 
-        this.checkingShare = json.result.distribution.checking.share;
-        this.marketShare = json.result.distribution.market.share;
-        this.savingsShare = json.result.distribution.savings.share;
+        const distribution = json.result.distribution;
 
+        this.checkingShare = distribution.checking.share;
+        this.marketShare = distribution.market.share;
+        this.savingsShare = distribution.savings.share;
         this.totalAmount = json.result.total.amount;
         this.netWorth = json.result.total.netWorth;
         this.financialAssets = json.result.total.financialAssets;
 
-        const totalWealth = document.querySelector('.total-wealth');
-        const netWorth = document.querySelector('.net-worth');
-        const financialAssets = document.querySelector('.financial-assets');
+        $('.total-wealth').innerHTML = `<span data-secret-mode="true">${this.totalAmount.toFixed()} €</span>`;
+        $('.net-worth').innerHTML = `<span data-secret-mode="true">${this.netWorth.toFixed()} €</span>`;
+        $('.financial-assets').innerHTML = `<span data-secret-mode="true">${this.financialAssets.toFixed()} €</span>`;
 
-        totalWealth.innerHTML = `<b>${this.totalAmount.toFixed()} €</b>`;
-        netWorth.innerHTML = `<b>${this.netWorth.toFixed()} €</b>`;
-        financialAssets.innerHTML = `<b>${this.financialAssets.toFixed()} €</b>`;
+        const news = await this.fetchFortuneoNews();
+
+        this.processFortuneoNews(news);
+
+        await this.loadAllocationChart();
     }
 
     async loadAllocationChart() {
@@ -75,11 +82,10 @@ class Dashboard {
                 type: 'doughnut',
                 data: data,
                 options: {
-                    cutout: 150,
                     responsive: true,
                     plugins: {
                         legend: {
-                            display: false
+                            position: "right"
                         },
                         tooltip: {
                             callbacks: {
@@ -92,5 +98,29 @@ class Dashboard {
                 }
             }
         );
+    }
+
+    /**
+     * @param {Array} news
+     */
+    processFortuneoNews(news) {
+        const ul = $('.fortuneo-news-list');
+
+        ul.querySelector('.placeholder-glow').remove();
+
+        news.forEach(article => {
+            const li = document.createElement('li');
+            li.classList.add('list-group-item');
+
+            const a = document.createElement('a');
+            a.classList.add('text-decoration-none');
+            a.innerText = article.title;
+            a.href = article.link;
+            a.target = '_blank';
+
+            li.appendChild(a);
+
+            ul.appendChild(li);
+        });
     }
 }

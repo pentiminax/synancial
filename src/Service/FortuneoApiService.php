@@ -20,7 +20,10 @@ class FortuneoApiService
     {
     }
 
-    public function listNews()
+    /**
+     * @return News[]
+     */
+    public function listNews(): array
     {
         $baseUrl = 'https://bourse.fortuneo.fr/api';
 

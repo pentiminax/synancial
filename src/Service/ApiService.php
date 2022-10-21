@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\AccountType;
 use App\Model\BankAccount;
 use App\Model\DataInterface;
 
@@ -22,17 +23,17 @@ class ApiService
         foreach ($bankAccounts as $account) {
             $balance = $account->balance;
             switch ($account->type) {
-                case 'checking':
+                case AccountType::CHECKING:
                     $checkingAsset->addAmount($balance);
                     break;
-                case 'loan':
+                case AccountType::LOAN:
                     $loanAsset->addAmount(-$balance);
                     break;
-                case 'lifeinsurance':
-                case 'market':
+                case AccountType::LIFEINSURANCE:
+                case AccountType::MARKET:
                     $marketAsset->addAmount($balance);
                     break;
-                case 'savings':
+                case AccountType::SAVINGS:
                     $savingsAsset->addAmount($balance);
                     break;
                 default:
@@ -41,36 +42,5 @@ class ApiService
         }
 
         $viewData->processCalculatedData();
-    }
-
-    /**
-     * @param BankAccount[] $bankAccounts
-     * @return array
-     */
-    public function aggregateLiabilitiesAccount(array $bankAccounts): array
-    {
-        $liabilities = [
-            'loan' => [
-                'amount' => 0,
-                'share' => 0
-            ],
-        ];
-
-        $totalLiabilitiesAmount = 0;
-
-        foreach ($bankAccounts as $account) {
-            switch ($account->type) {
-                case 'loan':
-                    $liabilities['loan']['amount'] += 0 - $account->balance;
-                    $totalLiabilitiesAmount+= 0 - $account->balance;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        $liabilities['loan']['share'] = ($liabilities['loan']['amount'] / $totalLiabilitiesAmount) * 100;
-
-        return $liabilities;
     }
 }

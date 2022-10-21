@@ -1,4 +1,5 @@
 import {Chart, registerables} from "chart.js";
+import {enableTooltips} from "../../functions/bootstrap";
 const {initializeCustomSort, initializeTableSort} = require("../../functions/table_sort");
 const {ajaxFetch} = require("../../functions/request");
 const {$} = require("../../functions/dom");
@@ -50,7 +51,6 @@ class MarketView {
         $('.total-value').innerHTML = this.processCardTitle(`~ ${json.result['totalValue']} €`);
         $('.total-annual-dividend').innerHTML = this.processCardTitle(`~ ${json.result['totalAnnualDividend']} €`);
         $('.total-dividend-yield').innerHTML = this.processCardTitle(`${totalDividendYield} %`);
-
         $('.number-of-assets').innerHTML = json.result['numberOfAssets'];
     }
 

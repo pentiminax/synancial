@@ -1,15 +1,20 @@
 <div class="card">
-    <div class="card-header">
+    <div class="card-header text-center">
         {{ 'dashboard.labels.news'|trans }}
     </div>
-    <ul class="list-group list-group-flush">
-        {% for article in news %}
-            <li class="list-group-item">
-                <a target="_blank" class="text-decoration-none" href="{{ article.link }}">{{ article.title }}</a>
-            </li>
-        {% endfor %}
+    <ul class="list-group list-group-flush fortuneo-news-list">
+        <span class="placeholder-glow mx-3 my-3">
+            <span class="placeholder placeholder-lg col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder placeholder-lg col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder placeholder-sm col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+        </span>
     </ul>
-    <div class="card-footer text-muted">
+    <div class="card-footer text-center text-muted">
         <small>Powered by Fortuneo</small> <img height="32" width="32" src="{{ asset('images/fortuneo.png') }}" alt="Fortuneo icon" >
     </div>
 </div>

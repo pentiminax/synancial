@@ -1,4 +1,7 @@
 {% set class = 'spinner' %}
+{% set displayClass = '' %}
+{% set sizeClass = '' %}
+{% set typeClass = 'spinner-border' %}
 
 {% if additionalClass is defined %}
     {% set class = class ~ ' ' ~ additionalClass %}
@@ -8,11 +11,19 @@
     {% set color = 'dark' %}
 {% endif %}
 
-{% if type is not defined %}
-    {% set type = 'spinner-border' %}
+{% if display is defined and not display %}
+    {% set displayClass = 'd-none' %}
 {% endif %}
 
-<span class="{{ class }} {% if display is defined and not display %}d-none{% endif %}">
-    <span class="{{ type}} text-{{ color }}" role="status"></span>
+{% if sm is defined and sm %}
+    {% set sizeClass = typeClass ~ '-sm' %}
+{% endif %}
+
+{% if type is defined %}
+    {% set typeClass = type %}
+{% endif %}
+
+<span class="{{ class }} {{ displayClass }}">
+    <span class="{{ typeClass }} {{ sizeClass }} text-{{ color }}" role="status"></span>
     <span class="visually-hidden">Loading...</span>
 </span>

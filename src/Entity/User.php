@@ -18,25 +18,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private ?array $roles = [];
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    private ?string $password;
 
     #[ORM\Column(type: 'string', length: 128, nullable: true)]
-    private $bearerToken;
+    private ?string $bearerToken;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Connection::class)]
     private $connections;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $lastSync;
+    private \DateTime $lastSync;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TimeSerie::class)]
     #[ORM\OrderBy(value: ['date' => 'ASC'])]
@@ -186,12 +186,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLastSync(): ?\DateTimeInterface
+    public function getLastSync(): ?\DateTime
     {
         return $this->lastSync;
     }
 
-    public function setLastSync(?\DateTimeInterface $lastSync): self
+    public function setLastSync(?\DateTime $lastSync): self
     {
         $this->lastSync = $lastSync;
 

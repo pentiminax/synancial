@@ -5,7 +5,7 @@
  * @param headers {RequestInit}
  * @returns {Promise<Response>}
  */
-export async function ajaxFetch(url, method, body = null, headers = {}) {
+export async function ajaxFetch(url, method = 'GET', body = null, headers = {}) {
     const defaultHeaders = {
         'X-Requested-With': 'XMLHttpRequest'
     };

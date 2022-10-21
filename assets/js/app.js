@@ -1,8 +1,9 @@
 import '../css/app.scss';
 
 import {Alert} from "./alert";
-import {Collapse, Dropdown, Tooltip} from "bootstrap";
+import {Tooltip} from "bootstrap";
 import {ajaxFetch} from "./functions/request";
+import {$} from "./functions/dom";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const app = new App();
@@ -12,11 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 class App {
-    /**
-     * @var {HTMLElement}
-     */
-    addAssetButton;
-
     /**
      * @var {HTMLElement}
      */
@@ -53,7 +49,6 @@ class App {
     flashes;
 
     constructor() {
-        this.addAssetButton = document.querySelector('.add-asset-button');
         this.secretModeButton = document.querySelector('.secret-mode-button');
         this.syncButton = document.querySelector('.sync-button');
         this.secretModeButtonIcon = this.secretModeButton.querySelector('i');
@@ -74,7 +69,7 @@ class App {
             });
         }
 
-        this.addAssetButton.addEventListener('click', e => {
+        $('.add-asset-button').addEventListener('click', e => {
             window.location.href = '/wallet/list';
         });
 

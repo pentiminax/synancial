@@ -6,22 +6,23 @@ use App\Model\Asset;
 use App\Model\DataInterface;
 use App\Model\Distribution;
 use App\Model\TimestampedInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 class DashboardData implements DataInterface, TimestampedInterface
 {
+    #[Ignore]
+    private ?\DateTime $createdAt;
+
     private Distribution $distribution;
 
     private Total $total;
 
-    #[Ignore]
-    private ?\DateTime $createdAt;
-
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->distribution = new Distribution();
         $this->total = new Total();
-        $this->createdAt = new \DateTime();
     }
 
     public function getDistribution(): Distribution

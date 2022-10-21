@@ -7,14 +7,14 @@ use App\Repository\AccountTypeRepository;
 use App\Service\BudgetInsightApiService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'app:load-account-types')]
 class LoadAccountTypesCommand extends Command
 {
-    protected static $defaultName = 'app:load-account-types';
-
     /** @var AccountType[] */
     private array $accountTypes;
 
