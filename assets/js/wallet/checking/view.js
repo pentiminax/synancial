@@ -5,73 +5,68 @@ import {ajaxFetch} from "../../functions/request";
 document.addEventListener('DOMContentLoaded', async () => {
     Chart.register(...registerables);
 
-    const accountId = $('.checking-view-data').dataset.accountId;
-
-    const checkingView = new CheckingView(accountId);
-
+    const checkingView = new CheckingView();
     await checkingView.loadUserTimeSeries();
 
-    checkingView.loadCheckingViewLineChart();
+    checkingView.loadCheckingViewLineChart()
     checkingView.loadCheckingViewBarChart();
+
 });
 
 class CheckingView {
+    /** @type {Number} */
     accountId;
 
-    /**
-     *
-     * @type {Number}
-     */
-    offset = Number($('.checking-view-data').dataset.offset)
+    /** @type {String} */
+    currentOperationType;
 
-    limit = $('.checking-view-data').dataset.limit;
+    /** @type {Number} */
+    offset;
+
+    /** @type {Number} */
+    limit;
 
     transactions;
 
-    /**
-     * @type {HTMLElement}
-     */
+    /** @type {HTMLElement} */
     loader;
 
-    /**
-     * @type {HTMLButtonElement}
-     */
+    /** @type {HTMLButtonElement} */
     loadMoreTransactionsButton;
 
-    /**
-     * @var {Array}
-     */
+    /** @var {Array} */
     timeserieBarValues = [];
 
-    /**
-     * @var {Array}
-     */
+    /** @var {Array} */
     timeserieBarLabels = [];
 
-    /**
-     * @var {Array}
-     */
+    /** @var {Array} */
     timeserieLineValues = [];
 
-    /**
-     * @var {Array}
-     */
+    /** @var {Array} */
     timeserieLineLabels = [];
 
     yBarChartMax;
 
     yBarChartMin;
 
-    constructor(accountId) {
-        this.accountId = accountId;
-        this.loader = $('.loader');
-        this.loadMoreTransactionsButton = $('.load-more-transactions-button');
+    constructor() {
+        const checkingViewData =  $('.checking-view-data');
+
+        this.accountId = Number(checkingViewData.dataset.accountId);
+        this.limit = Number(checkingViewData.dataset.limit);
+
         this.listenSelectOperationType();
         this.listenSelectWording();
+
+        this.loader = $('.loader');
+        this.loadMoreTransactionsButton = $('.load-more-transactions-button');
+        this.offset =  Number(checkingViewData.dataset.offset);
 
         this.loadMoreTransactionsButton.addEventListener('click', async () => {
             await this.loadMoreTransactions();
         });
+
     }
 
     listenSelectWording() {
@@ -111,35 +106,8 @@ class CheckingView {
         }
 
         selectOperationType.addEventListener('change', e => {
-            const value = e.target.value.toUpperCase();
-
-            if (undefined === this.transactions) {
-                this.transactions = document.querySelectorAll('.transaction');
-            }
-
-            if ('ALL' === value) {
-                this.transactions.forEach(transaction => {
-                    transaction.classList.remove('d-none');
-                });
-                return;
-            }
-
-            this.transactions.forEach(transaction => {
-                const transactionTextClasses = transaction.querySelector('.card-body .card-text span').classList;
-
-                if ('CREDIT' === value) {
-                    transactionTextClasses.contains('text-success')
-                        ? transaction.classList.remove('d-none')
-                        : transaction.classList.add('d-none');
-                    return;
-                }
-
-                if ('DEBIT' === value) {
-                    transactionTextClasses.contains('text-danger')
-                        ? transaction.classList.remove('d-none')
-                        : transaction.classList.add('d-none');
-                }
-            });
+            this.currentOperationType = e.target.value.toUpperCase();
+            this.updateTransactions();
         });
     }
 
@@ -246,13 +214,13 @@ class CheckingView {
     }
 
     async loadMoreTransactions() {
-        this.showLoader();
+        this.loader.classList.remove('d-none');
 
         this.offset += 10;
 
         const response = await ajaxFetch(`/api/users/me/accounts/${this.accountId}/transactions?offset=${this.offset}&limit=${this.limit}`, 'GET');
 
-        this.hideLoader();
+        this.loader.classList.add('d-none');
 
         if (!response.ok) {
             return;
@@ -261,13 +229,37 @@ class CheckingView {
         const json = await response.json();
 
         this.loadMoreTransactionsButton.parentElement.insertAdjacentHTML('beforebegin', json.result);
+        this.transactions = document.querySelectorAll('.transaction');
+        this.updateTransactions();
     }
 
-    showLoader() {
-        this.loader.classList.remove('d-none');
-    }
+    updateTransactions() {
+        if (undefined === this.transactions) {
+            this.transactions = document.querySelectorAll('.transaction');
+        }
 
-    hideLoader() {
-        this.loader.classList.add('d-none');
+        if ('ALL' === this.currentOperationType) {
+            this.transactions.forEach(transaction => {
+                transaction.classList.remove('d-none');
+            });
+            return;
+        }
+
+        this.transactions.forEach(transaction => {
+            const transactionTextClasses = transaction.querySelector('.card-body .card-text .transaction-value').classList;
+
+            if ('CREDIT' === this.currentOperationType) {
+                transactionTextClasses.contains('text-success')
+                    ? transaction.classList.remove('d-none')
+                    : transaction.classList.add('d-none');
+                return;
+            }
+
+            if ('DEBIT' === this.currentOperationType) {
+                transactionTextClasses.contains('text-danger')
+                    ? transaction.classList.remove('d-none')
+                    : transaction.classList.add('d-none');
+            }
+        });
     }
 }

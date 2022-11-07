@@ -8,7 +8,7 @@
                 </h5>
                 <p class="card-text">
                     <span class="small text-muted">{{ transaction.original_wording }}</span>
-                    <span class="fs-5 float-end {{ valueClass }}" data-secret-mode="true">
+                    <span class="fs-5 float-end {{ valueClass }} transaction-value" data-secret-mode="true">
                         <b>{{ transaction.value  }} {{ app.user.currency.sign }}</b>
                     </span>
                 </p>
