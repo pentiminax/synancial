@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}{% endblock %} | MyBudget</title>
+        <title>{% block title %}{% endblock %} | {{ 'title'|trans }}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -20,7 +20,7 @@
             <div class="container">
                 <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
                     <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                        <h5 class="fw-bold">MyBudget</h5>
+                        <h5 class="fw-bold text-primary">{{ 'title'|trans }}</h5>
                     </a>
 
                     <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
