@@ -18,12 +18,18 @@ forms:
       currency: Currency
 
 menu:
-  dashboard: Dashboard
-  portfolio: Portfolio
   about: About
+  dashboard: Dashboard
+  documents: Documents
+  portfolio: Portfolio
 
   my_account:
     title: My account
     dropdown_items:
       parameters: Settings
       logout: Log Out
+
+wallet:
+  checking_accounts: Checking accounts
+  market_accounts: Investment accounts
+  savings_accounts: Savings accounts

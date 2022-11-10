@@ -5,16 +5,17 @@ namespace App\Service;
 use App\Entity\AccountType;
 use App\Entity\Connector;
 use App\Exception\SynchronizationException;
-use App\Model\BankAccount;
-use App\Model\Connection;
-use App\Model\Investment;
+use App\Model\PowensApi\BankAccount;
+use App\Model\PowensApi\Connection;
+use App\Model\PowensApi\Document;
+use App\Model\PowensApi\Investment;
+use App\Model\PowensApi\Subscription;
+use App\Model\PowensApi\Transaction;
 use App\Model\PermanentUserAccessToken;
 use App\Model\TemporaryCode;
-use App\Model\Transaction;
 use App\Model\UserAccessToken;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -27,9 +28,9 @@ class BudgetInsightApiService
 
     const LIST_BANK_ACCOUNTS_ENDPOINT = '/users/me/accounts';
     const LIST_CONNECTIONS_ENDPOINT = '/users/me/connections';
+    const LIST_DOCUMENTS_ENDPOINT = '/users/me/documents';
     const LIST_INVESTMENTS_ENDPOINT = '/users/me/investments';
-    const LIST_TRANSACTIONS_ENDPOINT = 'users/me/accounts/{id}/transactions';
-    const SYNC_CONNECTION_ENDPOINT = '/users/me/connections/{id}';
+    const LIST_SUBSCRIPTIONS_ENDPOINT = '/users/me/subscriptions';
 
     const LIST_CONNECTORS_ENDPOINT = '/connectors';
     const LIST_ACCOUNT_TYPES_ENDPOINT = '/account_types';
@@ -37,10 +38,10 @@ class BudgetInsightApiService
     private array $options = [];
 
     public function __construct(
-        private HttpClientInterface   $budgetInsightClient,
-        private SerializerInterface   $serializer,
-        private Security              $security,
-        private ParameterBagInterface $parameters
+        private readonly HttpClientInterface   $budgetInsightClient,
+        private readonly SerializerInterface   $serializer,
+        private readonly Security              $security,
+        private readonly ParameterBagInterface $parameters
     )
     {
     }
@@ -106,6 +107,16 @@ class BudgetInsightApiService
     }
 
     /**
+     * @return AccountType[]
+     */
+    public function listAccountTypes(): array
+    {
+        $data = json_decode($this->request('GET', self::LIST_ACCOUNT_TYPES_ENDPOINT), true);
+
+        return $this->serializer->deserialize(json_encode($data['accounttypes']), 'App\Entity\AccountType[]', 'json');
+    }
+
+    /**
      * @return BankAccount[]
      */
     public function listBankAccounts(?array $types = null): array
@@ -117,7 +128,7 @@ class BudgetInsightApiService
         $data = json_decode($this->request('GET', self::LIST_BANK_ACCOUNTS_ENDPOINT), true);
 
         /** @var BankAccount[] $accounts */
-        $accounts = $this->serializer->deserialize(json_encode($data['accounts']), 'App\Model\BankAccount[]', 'json');
+        $accounts = $this->serializer->deserialize(json_encode($data['accounts']), 'App\Model\PowensApi\BankAccount[]', 'json');
 
         if (!$types) {
             return $accounts;
@@ -130,6 +141,87 @@ class BudgetInsightApiService
         }
 
         return $response;
+    }
+
+    /**
+     * @return Connection[]
+     */
+    public function listConnections(): array
+    {
+        $this->useBearerToken();
+
+        $data = json_decode($this->request('GET', self::LIST_CONNECTIONS_ENDPOINT), true);
+
+        return $this->serializer->deserialize(json_encode($data['connections']), 'App\Model\PowensApi\Connection[]', 'json');
+    }
+
+    /**
+     * @return Connector[]
+     */
+    public function listConnectors(): array
+    {
+        $data = json_decode($this->request('GET', self::LIST_CONNECTORS_ENDPOINT), true);
+
+        return $this->deserialize($data['connectors'], 'App\Entity\Connector[]', true);
+    }
+
+    /**
+     * @return Document[]
+     */
+    public function listDocuments(): array
+    {
+        $data = json_decode($this->request('GET', self::LIST_DOCUMENTS_ENDPOINT), true);
+
+        return $this->deserialize($data['documents'], 'App\Model\PowensApi\Document[]', true);
+    }
+
+    public function listDocumentTypes(): array
+    {
+        $data = json_decode($this->request('GET', self::LIST_CONNECTORS_ENDPOINT), true);
+
+        return $this->deserialize($data['documenttypes'], 'App\Model\PowensApi\DocumentType[]', true);
+    }
+
+    /**
+     * @return Investment[]
+     */
+    public function listInvestments(): array
+    {
+        $this->useBearerToken();
+
+        $data = json_decode($this->request('GET', self::LIST_INVESTMENTS_ENDPOINT), true);
+
+        return $this->serializer->deserialize(json_encode($data['investments']), 'App\Model\PowensApi\Investment[]', 'json');
+    }
+
+    /**
+     * @return Investment[]
+     */
+    public function listInvestmentsByAccount(int $id): array
+    {
+        $this->useBearerToken();
+
+        $baseUrl = $this->parameters->get('base_url');
+
+        $data = json_decode($this->request('GET', "$baseUrl/users/me/accounts/$id/investments"), true);
+
+        return $this->serializer->deserialize(json_encode($data['investments']), 'App\Model\PowensApi\Investment[]', 'json');
+    }
+
+    /**
+     * @return Subscription[]
+     */
+    public function listSubscriptions(): array
+    {
+        $this->useBearerToken();
+
+        $this->options['query'] = [
+            'expand' => 'connection'
+        ];
+
+        $data = json_decode($this->request('GET', self::LIST_SUBSCRIPTIONS_ENDPOINT), true);
+
+        return $this->deserialize($data['subscriptions'], 'App\Model\PowensApi\Subscription[]', true);
     }
 
     /**
@@ -148,77 +240,45 @@ class BudgetInsightApiService
 
         $data = json_decode($this->request('GET', $url), true);
 
-        return $this->serializer->deserialize(json_encode($data['transactions']), 'App\Model\Transaction[]', 'json');
+        return $this->serializer->deserialize(json_encode($data['transactions']), 'App\Model\PowensApi\Transaction[]', 'json');
     }
 
-    /**
-     * @return Connection[]
-     */
-    public function listConnections(): array
-    {
-        $this->useBearerToken();
-
-        $data = json_decode($this->request('GET', self::LIST_CONNECTIONS_ENDPOINT), true);
-
-        return $this->serializer->deserialize(json_encode($data['connections']), 'App\Model\Connection[]', 'json');
-    }
-
-    /**
-     * @return Connector[]
-     */
-    public function listConnectors(): array
-    {
-        $data = json_decode($this->request('GET', self::LIST_CONNECTORS_ENDPOINT), true);
-
-        return $this->serializer->deserialize(json_encode($data['connectors']), 'App\Entity\Connector[]', 'json');
-    }
-
-    /**
-     * @return Investment[]
-     */
-    public function listInvestments(): array
-    {
-        $this->useBearerToken();
-
-        $data = json_decode($this->request('GET', self::LIST_INVESTMENTS_ENDPOINT), true);
-
-        return $this->serializer->deserialize(json_encode($data['investments']), 'App\Model\Investment[]', 'json');
-
-    }
-
-    /**
-     * @return Investment[]
-     */
-    public function listInvestmentsByAccount(int $id): array
+    public function getDocumentFile(int $idDocument, string $webid): string
     {
         $this->useBearerToken();
 
         $baseUrl = $this->parameters->get('base_url');
 
-        $data = json_decode($this->request('GET', "$baseUrl/users/me/accounts/$id/investments"), true);
+        $url = "$baseUrl/users/me/documents/$idDocument/file/$webid.png";
 
-        return $this->serializer->deserialize(json_encode($data['investments']), 'App\Model\Investment[]', 'json');
+        return $this->request(Request::METHOD_GET, $url);
     }
 
-    /**
-     * @return AccountType[]
-     */
-    public function listAccountTypes(): array
+    public function getDocumentThumbnail(int $idDocument, string $webid): string
     {
-        $data = json_decode($this->request('GET', self::LIST_ACCOUNT_TYPES_ENDPOINT), true);
+        $this->useBearerToken();
 
-        return $this->serializer->deserialize(json_encode($data['accounttypes']), 'App\Entity\AccountType[]', 'json');
+        $baseUrl = $this->parameters->get('base_url');
+
+        $url = "$baseUrl/users/me/documents/$idDocument/thumbnail/$webid.png";
+
+        return $this->request(Request::METHOD_GET, $url);
     }
 
-    public function manageConnections(string $token): string
+    public function getWebviewUrl(string $token, string $type = 'connect', string $connectorCapabilities = "bank"): string
     {
         $baseUrl = $this->parameters->get('base_url');
 
         $data = [
             'client_id' => $this->parameters->get('client_id'),
-            'code' => $this->generateTemporaryCode($token)->code,
-            'redirect_uri' => 'https://127.0.0.1:8000/api/users/me/webview'
+            'redirect_uri' => 'https://127.0.0.1:8000/api/users/me/webview',
+            'connector_uuids' => '07d76adf-ae35-5b38-aca8-67aafba13169',
+            'connector_capabilities' => $connectorCapabilities
         ];
+
+        if ('manage' === $type) {
+            $data['code'] = $this->generateTemporaryCode($token)->code;
+        }
 
         $query = http_build_query($data);
 
@@ -255,7 +315,16 @@ class BudgetInsightApiService
 
         $data = $this->request(Request::METHOD_PUT, "$baseUrl/users/me/connections/$id");
 
-        return $this->serializer->deserialize($data, Connection::class, 'json');
+        return $this->deserialize($data, Connection::class);
+    }
+
+    private function deserialize(mixed $data, string $type, bool $useJsonEncode = false, string $format = 'json'): mixed
+    {
+        if ($useJsonEncode) {
+            $data = json_encode($data);
+        }
+
+        return $this->serializer->deserialize($data, $type, $format);
     }
 
     private function useBearerToken(): void
@@ -265,34 +334,10 @@ class BudgetInsightApiService
         $this->options['auth_bearer'] = $bearerToken;
     }
 
-    /**
-     * @throws SynchronizationException
-     */
     private function request(string $method, string $url): string|array
     {
         $response = $this->budgetInsightClient->request($method, $url, $this->options);
 
-        try {
-            return $response->getContent();
-        } catch (\Exception $e) {
-            return $this->handleRequestException($e->getCode());
-        }
-    }
-
-    /**
-     * @throws SynchronizationException
-     */
-    private function handleRequestException(int $code): array
-    {
-        $data = [];
-
-        switch ($code) {
-            case Response::HTTP_CONFLICT:
-                throw new SynchronizationException("Can't force synchronization of connection");
-            default:
-                break;
-        }
-
-        return $data;
+        return $response->getContent(false);
     }
 }

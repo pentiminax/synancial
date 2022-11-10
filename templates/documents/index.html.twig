@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documents{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% for subscription in subscriptions %}
+            <div class="row">
+               <div class="col">
+                   <h2>{{ subscription.connector.name }}</h2>
+                   <hr>
+               </div>
+            </div>
+            <div class="row">
+                    {% for document in subscription.documents %}
+                        <div class="col-4">
+                            <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                    <span class="mt-2 thumbnail-{{ document.id_thumbnail }}" data-id-document="{{ document.id }}" data-id-thumbnail="{{ document.id_thumbnail }}" data-webid="{{ document.webid }}">
+                                    {% include 'partials/_loading_indicator.html.twig' with {color: 'primary', type: 'spinner-grow'} %}
+                                </span>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ document.name }}</h5>
+                                            <p class="card-text"><small class="text-muted">{{ document.date|date('d/m/Y H:i:s') }}</small></p>
+                                            <a href="{{ path('documents_download_file',  {idDocument: document.id, webid: document.webid}) }}" class="btn btn-primary">Télécharger</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('documents_list') }}
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Connection;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,17 @@ class ConnectionRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Connection[] Returns an array of Connection objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Connection
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @return Connection[]
+     */
+    public function findAllIndexedById(User $user): array
+    {
+        return $this->createQueryBuilder('connection', 'connection.id')
+            ->addSelect('connector')
+            ->innerJoin('connection.connector', 'connector')
+            ->where('connection.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }

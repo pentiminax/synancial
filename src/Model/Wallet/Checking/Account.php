@@ -2,7 +2,7 @@
 
 namespace App\Model\Wallet\Checking;
 
-use App\Model\BankAccount;
+use App\Model\PowensApi\BankAccount;
 
 class Account
 {

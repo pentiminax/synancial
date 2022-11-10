@@ -4,24 +4,55 @@
 
 {% block body %}
     <div class="container">
+
         <div class="row mb-3">
             <div class="col-xl-6 offset-xl-3">
-                <input type="search" class="form-control" id="exampleFormControlInput1" placeholder="Rechercher un établissement">
+                <input type="search" class="form-control" id="exampleFormControlInput1" placeholder="Rechercher un établissement" aria-label="Rechercher un établissement">
             </div>
         </div>
+
         <div class="row">
             <div class="col-xl-6 offset-xl-3">
                 <div class="row">
-                    <div class="list-group">
-                        {% for connector in connectors %}
-                            <a href="#" class="list-group-item list-group-item-action connector-item">
-                                <img height="32" width="32" src="{{ asset('images/' ~ connector.uuid ~ '.webp') }}">&nbsp;{{ connector.name }}
-                                <span class="btn btn-sm btn-primary float-end connector-sync-button" data-uuid="{{ connector.uuid }}">
-                                    Synchroniser
-                                </span>
-                            </a>
-                        {% endfor %}
+                    <nav>
+                        <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-my-account-tab"
+                                    data-bs-toggle="tab" data-bs-target="#checking-accounts"
+                                    type="button" role="tab"
+                                    aria-controls="nav-my-account" aria-selected="true">Comptes bancaires</button>
+                            <button class="nav-link" id="nav-profile-tab"
+                                    data-bs-toggle="tab" data-bs-target="#investments-account"
+                                    type="button" role="tab"
+                                    aria-controls="nav-profile" aria-selected="false">Comptes d'investissement
+                            </button>
+                            <button class="nav-link" id="nav-sync-tab"
+                                    data-bs-toggle="tab" data-bs-target="#documents"
+                                    type="button" role="tab"
+                                    aria-controls="nav-sync" aria-selected="false">Documents
+                            </button>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+
+                        <div class="tab-pane fade show active" id="checking-accounts" role="tabpanel">
+                            <div class="list-group">
+                                {% for connector in connectors %}
+                                    <a href="#" class="list-group-item list-group-item-action connector-item">
+                                        <img height="32" width="32" src="{{ asset('images/' ~ connector.uuid ~ '.webp') }}" alt="{{ connector.name }}">
+                                        &nbsp;{{ connector.name }}
+                                        <span class="btn btn-sm btn-primary float-end connector-sync-button" data-uuid="{{ connector.uuid }}">Synchroniser</span></a>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="investments-account" role="tabpanel"></div>
+
+                        <div class="tab-pane fade" id="documents" role="tabpanel"></div>
+
+
                     </div>
+
                 </div>
         </div>
     </div>

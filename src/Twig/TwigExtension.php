@@ -3,7 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\User;
-use App\Model\Investment;
+use App\Model\PowensApi\Investment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 

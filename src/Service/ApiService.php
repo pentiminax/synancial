@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\AccountType;
-use App\Model\BankAccount;
+use App\Model\PowensApi\BankAccount;
 use App\Model\DataInterface;
 
 class ApiService

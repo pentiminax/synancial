@@ -25,5 +25,4 @@ export async function ajaxFetch(url, method = 'GET', body = null, headers = {}) 
         body: body,
         headers: headers,
     });
-
 }

@@ -46,4 +46,14 @@ class ConnectorRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * @return Connector[]
+     */
+    public function findAllIndexedById(): array
+    {
+        return $this->createQueryBuilder('c', 'c.id')
+            ->getQuery()
+            ->getResult();
+    }
 }

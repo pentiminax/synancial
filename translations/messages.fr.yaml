@@ -18,8 +18,9 @@ forms:
       currency: Devise
 
 menu:
-  dashboard: Tableau de bord
   about: A propos
+  dashboard: Tableau de bord
+  documents: Documents
   portfolio: Portefeuille
 
   my_account:
@@ -27,3 +28,8 @@ menu:
     dropdown_items:
       parameters: Paramètres
       logout: Se déconnecter
+
+wallet:
+  checking_accounts: Comptes bancaires
+  market_accounts: Comptes d'investissements
+  savings_accounts: Livrets

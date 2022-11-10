@@ -4,8 +4,7 @@ namespace App\Service;
 
 use App\Entity\Dividend;
 use App\Entity\Symbol;
-use App\Model\BankAccount;
-use App\Model\Investment;
+use App\Model\PowensApi\Investment;
 use App\Repository\DividendRepository;
 use App\Repository\SymbolRepository;
 use Symfony\Component\HttpFoundation\Request;

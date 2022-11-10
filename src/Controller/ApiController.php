@@ -346,7 +346,7 @@ class ApiController extends AbstractController
     {
         $bearerToken = $this->getUser()->getBearerToken();
 
-        $url = $this->api->manageConnections($bearerToken);
+        $url = $this->api->getWebviewUrl($bearerToken, 'manage');
 
         $name = $request->query->get('name');
 
