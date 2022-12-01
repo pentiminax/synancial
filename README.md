@@ -13,3 +13,8 @@ Installing assets
 ```sh
 yarn build
 ```
+
+Services used
+--------------
+- [Powens](https://www.powens.com) (Open Banking)
+- [DivvyDiary](https://divvydiary.com) (Dividend Data)
