@@ -9,7 +9,7 @@
             <div class="col">
                 <a class="text-decoration-none text-dark" href="{{ path('wallet_savings_list') }}">
                     <h3><i class="fas fa-long-arrow-alt-left"></i>
-                        {{ account.name }} - {{ account.balance }} {{ app.user.currency.sign }}
+                        {{ account.name }} - <span data-secret-mode="true">{{ account.balance }} {{ app.user.currency.sign }}</span>
                     </h3>
                 </a>
             </div>
