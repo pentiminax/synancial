@@ -14,6 +14,11 @@ Installing assets
 yarn build
 ```
 
+📃 License
+----------
+
+Synancial is completely free and released under the [MIT License](https://github.com/pentiminax/synancial/blob/main/LICENCE).
+
 Services used
 --------------
 - [Powens](https://www.powens.com) (Open Banking)
