@@ -1,9 +1,9 @@
 {
     "devDependencies": {
-        "@symfony/webpack-encore": "^4.1.2",
-        "core-js": "^3.26.1",
-        "regenerator-runtime": "^0.13.10",
-        "sass": "^1.56.1",
+        "@symfony/webpack-encore": "^4.2.0",
+        "core-js": "^3.27.2",
+        "regenerator-runtime": "^0.13.11",
+        "sass": "^1.58.0",
         "sass-loader": "^13.2.0",
         "webpack-notifier": "^1.15.0"
     },
@@ -18,9 +18,9 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.2.1",
         "bootstrap": "^5.2.3",
-        "chart.js": "^4.0.1",
+        "chart.js": "^4.2.0",
         "flatpickr": "^4.6.13",
-        "sweetalert2": "^11.6.15",
+        "sweetalert2": "^11.7.1",
         "tablesort": "^5.3.0"
     }
 }
