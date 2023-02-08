@@ -6,6 +6,7 @@ use App\Entity\Connector;
 use App\Entity\User;
 use App\Repository\ConnectorRepository;
 use App\Service\BudgetInsightApiService;
+use App\Service\ConnectorService;
 use App\Service\TimeSerieService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,10 +52,10 @@ class WalletController extends AbstractController
     }
 
     #[Route('/wallet/list', name: 'wallet_list')]
-    public function list(ConnectorRepository $connectorRepo): Response
+    public function list(ConnectorService $connectorRepo): Response
     {
         return $this->render('wallet/list.html.twig', [
-            'connectors' => $connectorRepo->findAll()
+            'connectors' => $connectorRepo->findAllIndexedByProducts()
         ]);
     }
 

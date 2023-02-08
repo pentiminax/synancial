@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Service\BudgetInsightApiService;
+use App\Service\CurrencyService;
+use App\Service\LanguageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +34,14 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/register', name: 'security_register')]
-    public function register(Request $request, BudgetInsightApiService $api, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $em): Response
+    public function register(
+        BudgetInsightApiService $api,
+        CurrencyService $currencyService,
+        EntityManagerInterface $em,
+        LanguageService $languageService,
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher
+    ): Response
     {
         $user = new User();
 
@@ -46,6 +55,8 @@ class SecurityController extends AbstractController
             $bearerToken = $api->generatePermanentUserAccessToken($temporaryCode->code);
 
             $user->setBearerToken($bearerToken->access_token);
+            $user->setCurrency($currencyService->getDefaultCurrency());
+            $user->setLanguage($languageService->getDefaultLanguage());
 
             $em->persist($user);
             $em->flush();

@@ -37,7 +37,7 @@
 
                         <div class="tab-pane fade show active" id="checking-accounts" role="tabpanel">
                             <div class="list-group">
-                                {% for connector in connectors %}
+                                {% for connector in connectors.bank %}
                                     <a href="#" class="list-group-item list-group-item-action connector-item">
                                         <img height="32" width="32" src="{{ asset('images/' ~ connector.uuid ~ '.webp') }}" alt="{{ connector.name }}">
                                         &nbsp;{{ connector.name }}
@@ -46,9 +46,27 @@
                             </div>
                         </div>
 
-                        <div class="tab-pane fade" id="investments-account" role="tabpanel"></div>
+                        <div class="tab-pane fade" id="investments-account" role="tabpanel">
+                            <div class="list-group">
+                            {% for connector in connectors.wealth %}
+                                <a href="#" class="list-group-item list-group-item-action connector-item">
+                                    <img height="32" width="32" src="{{ asset('images/' ~ connector.uuid ~ '.webp') }}" alt="{{ connector.name }}">
+                                    &nbsp;{{ connector.name }}
+                                    <span class="btn btn-sm btn-primary float-end connector-sync-button" data-uuid="{{ connector.uuid }}">Synchroniser</span></a>
+                            {% endfor %}
+                            </div>
+                        </div>
 
-                        <div class="tab-pane fade" id="documents" role="tabpanel"></div>
+                        <div class="tab-pane fade" id="documents" role="tabpanel">
+                            <div class="list-group">
+                            {% for connector in connectors.bill %}
+                                <a href="#" class="list-group-item list-group-item-action connector-item">
+                                    <img height="32" width="32" src="{{ asset('images/' ~ connector.uuid ~ '.webp') }}" alt="{{ connector.name }}">
+                                    &nbsp;{{ connector.name }}
+                                    <span class="btn btn-sm btn-primary float-end connector-sync-button" data-uuid="{{ connector.uuid }}">Synchroniser</span></a>
+                            {% endfor %}
+                            </div>
+                        </div>
 
 
                     </div>

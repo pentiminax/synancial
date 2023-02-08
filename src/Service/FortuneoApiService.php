@@ -5,17 +5,16 @@ namespace App\Service;
 use App\Model\News;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FortuneoApiService
 {
-    const NEWS_ENDPOINT = '/news';
-
     private array $options = [];
 
     public function __construct(
-        private HttpClientInterface $client,
-        private SerializerInterface $serializer
+        private readonly HttpClientInterface $client,
+        private readonly SerializerInterface $serializer
     )
     {
     }
@@ -35,6 +34,11 @@ class FortuneoApiService
 
         $data = json_decode($this->request(Request::METHOD_GET, "$baseUrl/news/"), true);
 
+        if (!isset($data['news'])) {
+            return [];
+        }
+
+
         return $this->serializer->deserialize(json_encode($data['news']), 'App\Model\News[]', 'json');
 
     }
@@ -43,6 +47,7 @@ class FortuneoApiService
     {
         $response = $this->client->request($method, $url, $this->options);
 
-        return $response->getContent();
+
+        return $response->getContent(false);
     }
 }

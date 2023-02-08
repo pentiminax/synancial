@@ -12,46 +12,49 @@ class Connector
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $uuid;
+    private ?string $uuid;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $name;
+    private ?string $name;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $hidden;
+    private ?bool $hidden;
 
     #[ORM\Column(type: 'boolean')]
-    private $charged;
+    private ?bool $charged;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
-    private $code;
+    private ?string $code;
 
     #[ORM\Column(type: 'boolean')]
-    private $beta;
+    private ?bool $beta;
 
     #[ORM\Column(type: 'string', length: 6, nullable: true)]
-    private $color;
+    private ?string $color;
 
     #[ORM\Column(type: 'string', length: 4, nullable: true)]
-    private $slug;
+    private ?string $slug;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $syncFrequency;
+    private ?int $syncFrequency;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $monthsToFetch;
+    private ?int $monthsToFetch;
 
     #[ORM\Column(type: 'string', length: 14, nullable: true)]
-    private $siret;
+    private ?string $siret;
 
     #[ORM\Column(type: 'boolean')]
-    private $restricted;
+    private ?bool $restricted;
 
     #[ORM\OneToMany(mappedBy: 'connector', targetEntity: Connection::class)]
-    private $connections;
+    private Collection $connections;
+
+    #[ORM\Column(type: 'json')]
+    private ?array $products = [];
 
     public function __construct()
     {
@@ -240,6 +243,18 @@ class Connector
                 $connection->setConnector(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProducts(): array
+    {
+        return array_unique($this->products);
+    }
+
+    public function setProducts(array $products): self
+    {
+        $this->products = $products;
 
         return $this;
     }

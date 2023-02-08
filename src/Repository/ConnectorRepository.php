@@ -47,13 +47,18 @@ class ConnectorRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @return Connector[]
-     */
-    public function findAllIndexedById(): array
+    public function findAllIndexedByProducts(): array
     {
-        return $this->createQueryBuilder('c', 'c.id')
-            ->getQuery()
-            ->getResult();
+        $indexedConnectors = [];
+
+        $connectors = $this->findAll();
+
+        foreach ($connectors as $connector) {
+            foreach ($connector->getProducts() as $product) {
+                $indexedConnectors[$product][] = $connector;
+            }
+        }
+
+        return $indexedConnectors;
     }
 }

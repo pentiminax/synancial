@@ -14,7 +14,6 @@ class Dashboard {
     checkingShare;
     marketShare;
     savingsShare;
-
     totalAmount;
     netWorth;
     financialAssets;
@@ -104,6 +103,8 @@ class Dashboard {
      * @param {Array} news
      */
     processFortuneoNews(news) {
+        if (!news) return;
+
         const ul = $('.fortuneo-news-list');
 
         ul.querySelector('.placeholder-glow').remove();

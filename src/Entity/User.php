@@ -33,25 +33,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $bearerToken;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Connection::class)]
-    private $connections;
+    private Collection $connections;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private \DateTime $lastSync;
+    private ?\DateTime $lastSync;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TimeSerie::class)]
     #[ORM\OrderBy(value: ['date' => 'ASC'])]
-    private $timeSeries;
+    private Collection $timeSeries;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Account::class)]
-    private $accounts;
+    private Collection $accounts;
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $isSecretModeEnabled = false;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
     #[ORM\ManyToOne]
