@@ -6,11 +6,12 @@ use App\Model\Asset;
 use App\Model\DataInterface;
 use App\Model\Distribution;
 use App\Model\TimestampedInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 class DashboardData implements DataInterface, TimestampedInterface
 {
+    private AllocationChart $allocationChart;
+
     #[Ignore]
     private ?\DateTime $createdAt;
 
@@ -20,9 +21,22 @@ class DashboardData implements DataInterface, TimestampedInterface
 
     public function __construct()
     {
+        $this->allocationChart = new AllocationChart();
         $this->createdAt = new \DateTime();
         $this->distribution = new Distribution();
         $this->total = new Total();
+    }
+
+    public function getAllocationChart(): AllocationChart
+    {
+        return $this->allocationChart;
+    }
+
+    public function setAllocationChart(AllocationChart $allocationChart): self
+    {
+        $this->allocationChart = $allocationChart;
+
+        return $this;
     }
 
     public function getDistribution(): Distribution
@@ -62,13 +76,13 @@ class DashboardData implements DataInterface, TimestampedInterface
 
     public function processCalculatedData(): void
     {
-        $assets = $this->distribution->getAssets();
         $checking = $this->distribution->getChecking();
+        $crowdlendings = $this->distribution->getCrowdlendings();
         $loan = $this->distribution->getLoan();
         $market = $this->distribution->getMarket();
         $savings = $this->distribution->getSavings();
 
-        $amount = array_sum($assets
+        $amount = array_sum($this->distribution->getAssets()
             ->filter(fn(Asset $asset) => $asset !== $loan)
             ->map(fn(Asset $asset) => $asset->getAmount())->toArray());
 
@@ -86,6 +100,7 @@ class DashboardData implements DataInterface, TimestampedInterface
         }
 
         $checking->setShare($checking->getAmount() / $totalAmount * 100);
+        $crowdlendings->setShare($crowdlendings->getAmount() / $totalAmount * 100);
         $market->setShare($market->getAmount() / $totalAmount * 100);
         $savings->setShare($savings->getAmount() / $totalAmount * 100);
     }

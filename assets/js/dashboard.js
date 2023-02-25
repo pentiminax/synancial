@@ -1,6 +1,7 @@
-import {Chart, registerables} from "chart.js";
+import {Chart, registerables} from "chart.js/auto";
 import {$} from "./functions/dom";
 import {ajaxFetch} from "./functions/request";
+import {getDashboardData} from "./functions/api";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const dashboard = new Dashboard();
@@ -11,7 +12,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 class Dashboard {
+    allocationChart;
     checkingShare;
+
+    /** @type {DashboardData} */
+    data;
+
     marketShare;
     savingsShare;
     totalAmount;
@@ -26,26 +32,11 @@ class Dashboard {
     }
 
     async initialize() {
-        const response = await ajaxFetch('/api/users/me/views/dashboard');
+        this.data = await getDashboardData();
 
-        const json = await response.json();
-
-        if (!json.result) {
-            return;
-        }
-
-        const distribution = json.result.distribution;
-
-        this.checkingShare = distribution.checking.share;
-        this.marketShare = distribution.market.share;
-        this.savingsShare = distribution.savings.share;
-        this.totalAmount = json.result.total.amount;
-        this.netWorth = json.result.total.netWorth;
-        this.financialAssets = json.result.total.financialAssets;
-
-        $('.total-wealth').innerHTML = `<span data-secret-mode="true">${this.totalAmount.toFixed()} €</span>`;
-        $('.net-worth').innerHTML = `<span data-secret-mode="true">${this.netWorth.toFixed()} €</span>`;
-        $('.financial-assets').innerHTML = `<span data-secret-mode="true">${this.financialAssets.toFixed()} €</span>`;
+        $('.total-wealth').innerHTML = `<span data-secret-mode="true">${this.data.total.amount.toFixed()} €</span>`;
+        $('.net-worth').innerHTML = `<span data-secret-mode="true">${this.data.total.netWorth.toFixed()} €</span>`;
+        $('.financial-assets').innerHTML = `<span data-secret-mode="true">${this.data.total.financialAssets.toFixed()} €</span>`;
 
         const news = await this.fetchFortuneoNews();
 
@@ -55,27 +46,26 @@ class Dashboard {
     }
 
     async loadAllocationChart() {
-        if (null === this.checkingShare || null === this.marketShare || null === this.savingsShare) {
-            return;
-        }
-
         const data = {
-            labels: [
-                'Compte bancaires',
-                "Comptes d'investissements",
-                "Livrets"
-            ],
+            labels: this.data.allocationChart.labels,
             datasets: [{
                 backgroundColor: [
                     '#338AFF',
                     '#B233FF',
-                    '#09A72B'
+                    '#09A72B',
+                    '#4040B5',
                 ],
-                data: [this.checkingShare.toFixed(), this.marketShare.toFixed(0), this.savingsShare.toFixed(0)],
+                data: [
+                    this.data.distribution.checking.share.toFixed(0),
+                    this.data.distribution.market.share.toFixed(0),
+                    this.data.distribution.savings.share.toFixed(0),
+                    this.data.distribution.crowdlendings.share.toFixed(0)
+                ],
                 label: 'Dataset',
             }]
         };
 
+        console.log(data);
         new Chart(
             document.querySelector('#allocationChart'), {
                 type: 'doughnut',

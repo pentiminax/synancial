@@ -14,16 +14,16 @@ class Distribution
     private ArrayCollection $liabilities;
 
     private Asset $checking;
-
+    private Asset $crowdlendings;
     private Asset $loan;
-
     private Asset $market;
-
     private Asset $savings;
+
 
     public function __construct()
     {
         $this->checking = new Asset(0, 0);
+        $this->crowdlendings = new Asset( 0, 0);
         $this->loan = new Asset(0, 0);
         $this->market = new Asset( 0, 0);
         $this->savings = new Asset( 0, 0);
@@ -31,7 +31,8 @@ class Distribution
         $this->assets = new ArrayCollection([
             'checking' => $this->checking,
             'market' => $this->market,
-            'savings' => $this->savings
+            'savings' => $this->savings,
+            'crowdlendings' => $this->crowdlendings
         ]);
 
         $this->liabilities = new ArrayCollection([
@@ -50,6 +51,11 @@ class Distribution
     public function getChecking(): Asset
     {
         return $this->checking;
+    }
+
+    public function getCrowdlendings(): Asset
+    {
+        return $this->crowdlendings;
     }
 
     public function getLiabilities(): ArrayCollection

@@ -14,6 +14,7 @@ class AccountType
     CONST LIFEINSURANCE = 'lifeinsurance';
     const LOAN = 'loan';
     const MARKET = 'market';
+    const REAL_ESTATE = 'real_estate';
     const SAVINGS = 'savings';
 
     #[ORM\Id]

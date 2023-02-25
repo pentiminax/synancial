@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Connector;
 use App\Entity\User;
-use App\Repository\ConnectorRepository;
 use App\Service\BudgetInsightApiService;
 use App\Service\ConnectorService;
 use App\Service\TimeSerieService;

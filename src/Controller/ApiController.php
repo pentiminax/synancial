@@ -382,29 +382,6 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/users/me/investments', name: 'api_users_me_investments', methods: ['GET'])]
-    public function investments(): Response
-    {
-        $investments = $this->api->listInvestments();
-
-        $totalValuation = 0;
-
-        foreach ($investments as $investment) {
-            $totalValuation += $investment->valuation;
-        }
-
-        $result = $this->renderView('wallet/investments_accordion.html.twig', [
-            'investments' => $investments
-        ]);
-
-
-        return $this->json([
-            'error' => null,
-            'message' => 'OK',
-            'result' => $result
-        ]);
-    }
-
     #[Route('/api/users/me/timeseries/{id}', name: 'api_users_me_timeseries')]
     public function timeseries(?int $id, TimeSerieService $timeSerieService): Response
     {

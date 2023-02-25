@@ -16,6 +16,7 @@ class ApiService
         $distribution = $viewData->getDistribution();
 
         $checkingAsset = $distribution->getChecking();
+        $crowdlendingsAsset = $distribution->getCrowdlendings();
         $loanAsset = $distribution->getLoan();
         $marketAsset = $distribution->getMarket();
         $savingsAsset = $distribution->getSavings();
@@ -25,6 +26,9 @@ class ApiService
             switch ($account->type) {
                 case AccountType::CHECKING:
                     $checkingAsset->addAmount($balance);
+                    break;
+                case AccountType::REAL_ESTATE:
+                    $crowdlendingsAsset->addAmount($balance);
                     break;
                 case AccountType::LOAN:
                     $loanAsset->addAmount(-$balance);

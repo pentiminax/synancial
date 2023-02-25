@@ -36,5 +36,14 @@
         <td class="fw-bold">{{ assets.savings.share|round }} %</td>
         <td><span class="fw-bold" data-secret-mode="true">{{ assets.savings.amount|round }} {{ sign }}</span></td>
     </tr>
+    <tr>
+        <td>
+            <a class="text-dark text-decoration-none" href="{{ path('wallet_savings_list') }}">
+                <b>Crowdlendings <i class="fas fa-long-arrow-alt-right"></i></b>
+            </a>
+        </td>
+        <td class="fw-bold">{{ assets.crowdlendings.share|round }} %</td>
+        <td><span class="fw-bold" data-secret-mode="true">{{ assets.crowdlendings.amount|round }} {{ sign }}</span></td>
+    </tr>
     </tbody>
 </table>
