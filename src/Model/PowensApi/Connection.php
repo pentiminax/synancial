@@ -10,7 +10,7 @@ class Connection
 
     public int $id_connector;
 
-    public \DateTime $last_update;
+    public ?\DateTime $last_update;
 
     public \DateTime $created;
 
