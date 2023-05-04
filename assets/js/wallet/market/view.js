@@ -41,9 +41,10 @@ class MarketView {
 
         $('.market-area').innerHTML = json.result['investments'];
 
-        if ('market' !== this.accountType) {
+        if ('market' !== this.accountType && 'pea' !== this.accountType) {
             return;
         }
+
 
         const totalAnnualDividend = json.result['totalAnnualDividend'];
         const totalDividendYield = Number((totalAnnualDividend / totalValue) * 100).toFixed(2);

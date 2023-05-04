@@ -14,7 +14,7 @@
             </h2>
         </div>
 
-        {% if constant('App\\Entity\\AccountType::MARKET') == account.type %}
+        {% if constant('App\\Entity\\AccountType::MARKET') == account.type or constant('App\\Entity\\AccountType::PEA') == account.type %}
         <div class="row mb-3">
             <div class="card-group">
                 <div class="card text-center">

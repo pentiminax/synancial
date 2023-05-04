@@ -16,8 +16,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'app:load-symbols')]
 class LoadSymbolsCommand extends Command
 {
-    const SYMBOLS_ENDPOINT = '/symbols';
+    const BATCH_SIZE = 100;
+
     const LIMIT = 100;
+
+    const SYMBOLS_ENDPOINT = '/symbols';
 
     public function __construct(
         private readonly EntityManagerInterface  $em,
@@ -56,6 +59,7 @@ class LoadSymbolsCommand extends Command
             }
 
             $this->em->flush();
+            $this->em->clear();
         }
 
         return Command::SUCCESS;

@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -158,9 +159,10 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/users/me/views/wallet/market', name: 'api_wallet_market_list')]
+    #[Cache(public: true, maxage: 3600, mustRevalidate: true)]
     public function marketList(): Response
     {
-        $accounts = $this->api->listBankAccounts([AccountType::MARKET, AccountType::LIFEINSURANCE], true);
+        $accounts = $this->api->listBankAccounts([AccountType::LIFEINSURANCE, AccountType::MARKET, AccountType::PEA]);
 
         $result['investments'] = '';
 
@@ -198,7 +200,7 @@ class ApiController extends AbstractController
             'isView' => true
         ]);
 
-        if (AccountType::MARKET === $account->type) {
+        if (AccountType::MARKET === $account->type || AccountType::PEA === $account->type) {
             $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
             foreach ($investments as $investment) {
                 $totalValue += $investment->unitvalue * $investment->quantity;

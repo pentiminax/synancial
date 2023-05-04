@@ -15,9 +15,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * @method User getUser()
  */
+#[Route('/wallet')]
 class WalletController extends AbstractController
 {
-    #[Route('/wallet/add/{uuid}', name: 'wallet_add')]
+    #[Route('/add/{uuid}', name: 'wallet_add')]
     public function add(Connector $connector, BudgetInsightApiService $api): Response
     {
         $useBearerToken = (bool)$this->getUser()->getBearerToken();
@@ -44,13 +45,13 @@ class WalletController extends AbstractController
         return $this->redirect($url);
     }
 
-    #[Route('/wallet', name: 'wallet')]
+    #[Route('/', name: 'wallet')]
     public function index(): Response
     {
         return $this->render('wallet/index.html.twig');
     }
 
-    #[Route('/wallet/list', name: 'wallet_list')]
+    #[Route('/list', name: 'wallet_list')]
     public function list(ConnectorService $connectorRepo): Response
     {
         return $this->render('wallet/list.html.twig', [
@@ -58,13 +59,13 @@ class WalletController extends AbstractController
         ]);
     }
 
-    #[Route('/wallet/checking', name: 'wallet_checking_list')]
+    #[Route('/checking', name: 'wallet_checking_list')]
     public function checkingList(): Response
     {
         return $this->render('wallet/checking/index.html.twig');
     }
 
-    #[Route('/wallet/checking/{id}', name: 'wallet_checking_view')]
+    #[Route('/checking/{id}', name: 'wallet_checking_view')]
     public function checkingView(int $id, BudgetInsightApiService $api, TimeSerieService $timeSerieService): Response
     {
         $account = $api->getBankAccount($id);
@@ -98,13 +99,13 @@ class WalletController extends AbstractController
         ]);
     }
 
-    #[Route('/wallet/market', name: 'wallet_market_list')]
+    #[Route('/market', name: 'wallet_market_list')]
     public function marketList(): Response
     {
         return $this->render('wallet/market/index.html.twig');
     }
 
-    #[Route('/wallet/market/{id}', name: 'wallet_market_view')]
+    #[Route('/market/{id}', name: 'wallet_market_view')]
     public function marketView(int $id, BudgetInsightApiService $api): Response
     {
         $account = $api->getBankAccount($id);
@@ -118,19 +119,19 @@ class WalletController extends AbstractController
         ]);
     }
 
-    #[Route('/wallet/loans', name: 'wallet_loans')]
+    #[Route('/loans', name: 'wallet_loans')]
     public function loans(): Response
     {
         return $this->render('wallet/loans/index.html.twig');
     }
 
-    #[Route('/wallet/savings', name: 'wallet_savings_list')]
+    #[Route('/savings', name: 'wallet_savings_list')]
     public function savingsList(): Response
     {
         return $this->render('wallet/savings/list.html.twig');
     }
 
-    #[Route('/wallet/savings/{id}', name: 'wallet_savings_view')]
+    #[Route('/savings/{id}', name: 'wallet_savings_view')]
     public function savingsView(int $id, BudgetInsightApiService $api): Response
     {
         return $this->render('wallet/savings/view.html.twig', [

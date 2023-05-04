@@ -14,6 +14,7 @@ class AccountType
     CONST LIFEINSURANCE = 'lifeinsurance';
     const LOAN = 'loan';
     const MARKET = 'market';
+    const PEA = 'pea';
     const REAL_ESTATE = 'real_estate';
     const SAVINGS = 'savings';
 

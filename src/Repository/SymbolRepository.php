@@ -40,6 +40,20 @@ class SymbolRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Symbol[]
+     */
+    public function findAllISINThatPayDividends(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.dividendFrequency != :dividendFrequency')
+            ->setParameters([
+                'dividendFrequency' => 'none',
+            ])
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findOneThatPayDividendsByISIN(string $isin): ?Symbol
     {
         return $this->createQueryBuilder('s')
