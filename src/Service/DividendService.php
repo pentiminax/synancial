@@ -44,6 +44,9 @@ class DividendService
         }
 
         $symbols = $this->symbolRepo->findAllThatPayDividendsByISINS($isins);
+
+        $this->loadSymbolsDividends($symbols);
+
         $dividends = $this->dividendRepo->findAllBySymbolsForCurrentYear($symbols);
 
         foreach ($dividends as $dividend) {
@@ -58,24 +61,15 @@ class DividendService
         return intval(round($dividendsAmount));
     }
 
-    /**
-     * @return Dividend[]|null
-     */
-    public function findAllByISIN(string $isin): ?array
+    public function loadSymbolsDividends(array $symbols): void
     {
-        $symbol = $this->symbolRepo->findOneThatPayDividendsByISIN($isin);
+        foreach ($symbols as $symbol) {
+            $dividends = $this->dividendRepo->findBy(['symbol' => $symbol]);
 
-        if (!$symbol) {
-            return null;
+            if (!$dividends) {
+                $this->loadDividendsForSymbol($symbol);
+            }
         }
-
-        $dividends = $this->dividendRepo->findBy(['symbol' => $symbol]);
-
-        if (!$dividends) {
-            $this->loadDividendsForSymbol($symbol);
-        }
-
-        return $dividends;
     }
 
     private function loadDividendsForSymbol(Symbol $symbol): void

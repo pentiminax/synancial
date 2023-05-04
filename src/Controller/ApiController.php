@@ -202,6 +202,7 @@ class ApiController extends AbstractController
 
         if (AccountType::MARKET === $account->type || AccountType::PEA === $account->type) {
             $totalAnnualDividend += $dividendService->getDividendsAmountByInvestments($investments);
+
             foreach ($investments as $investment) {
                 $totalValue += $investment->unitvalue * $investment->quantity;
             }
