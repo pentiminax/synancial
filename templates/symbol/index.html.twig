@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <input class="form-control" placeholder="Recherche par nom ou ISIN" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {% for symbol in symbols %}
+                    <div class="card my-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ symbol.name }}</h5>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

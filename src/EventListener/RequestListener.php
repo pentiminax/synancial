@@ -29,6 +29,10 @@ class RequestListener
             return;
         }
 
-        $this->localeSwitcher->setLocale($user->getLanguage()->getCode());
+        $userLanguageCode = strtolower($user->getLanguage()->getCode());
+
+        if ($this->localeSwitcher->getLocale() !== $userLanguageCode) {
+            $this->localeSwitcher->setLocale($userLanguageCode);
+        }
     }
 }

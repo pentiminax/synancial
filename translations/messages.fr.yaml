@@ -22,6 +22,7 @@ menu:
   dashboard: Tableau de bord
   documents: Documents
   portfolio: Portefeuille
+  stocks: Actions
 
   my_account:
     title: Mon compte
