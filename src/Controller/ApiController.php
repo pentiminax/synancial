@@ -64,9 +64,8 @@ class ApiController extends AbstractController
     {
         $offset = $request->query->getInt('offset');
         $limit = $request->query->getInt('limit', 10);
-        $period = $request->query->getAlpha('period', 'all');
 
-        $transactions = $this->api->listTransactions($id, $offset, $limit, $period);
+        $transactions = $this->api->listTransactions($id, $offset, $limit);
 
         return $this->json([
             'error' => 'null',

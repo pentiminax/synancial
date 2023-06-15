@@ -18,12 +18,17 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route('/wallet')]
 class WalletController extends AbstractController
 {
+    public function __construct(
+        private readonly BudgetInsightApiService $api
+    ) {
+    }
+
     #[Route('/add/{uuid}', name: 'wallet_add')]
-    public function add(Connector $connector, BudgetInsightApiService $api): Response
+    public function add(Connector $connector): Response
     {
         $useBearerToken = (bool)$this->getUser()->getBearerToken();
 
-        $temporaryCode = $api->generateTemporaryCode($useBearerToken);
+        $temporaryCode = $this->api->generateTemporaryCode($useBearerToken);
 
         $redirectUri = $this->generateUrl('api_users_me_webview', [
             'bank_name' => $connector->getName(),
@@ -66,9 +71,9 @@ class WalletController extends AbstractController
     }
 
     #[Route('/checking/{id}', name: 'wallet_checking_view')]
-    public function checkingView(int $id, BudgetInsightApiService $api, TimeSerieService $timeSerieService): Response
+    public function checkingView(int $id, TimeSerieService $timeSerieService): Response
     {
-        $account = $api->getBankAccount($id);
+        $account = $this->api->getBankAccount($id);
 
         if (!$account) {
             return $this->redirectToRoute('dashboard');
@@ -76,7 +81,7 @@ class WalletController extends AbstractController
 
         $timeSerieService->add($account->id, $account->balance);
 
-        $transactions = $api->listTransactions($id);
+        $transactions = $this->api->listTransactions($id);
 
         $wordings = [];
 

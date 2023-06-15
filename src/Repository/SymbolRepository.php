@@ -79,4 +79,9 @@ class SymbolRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findOneBySymbol(string $symbol)
+    {
+        return $this->findOneBy(['symbol' => $symbol]);
+    }
 }

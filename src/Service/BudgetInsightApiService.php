@@ -227,7 +227,7 @@ class BudgetInsightApiService
     /**
      * @return Transaction[]
      */
-    public function listTransactions(?int $accountId = null, int $offset = 0, int $limit = 10, string $period = "all"): array
+    public function listTransactions(?int $accountId = null, int $offset = 0, ?int $limit = 10, ?\DateTime $maxDate = null): array
     {
         $this->useBearerToken();
 
@@ -235,7 +235,8 @@ class BudgetInsightApiService
 
         $this->options['query'] = [
             'offset' => $offset,
-            'limit' => $limit
+            'limit' => $limit,
+            'max_date' => $maxDate?->format('Y-m-d')
         ];
 
         $data = json_decode($this->request('GET', $url), true);
