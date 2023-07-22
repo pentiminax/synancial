@@ -23,11 +23,11 @@
                     <small>Mis à jour {{ account.last_sync_at|date('d/m/Y H:i:s') }}</small>
                     <hr class="dropdown-divider">
                     <div id="connection-data" data-uuid="{{ account.id }}">
-                        <button class="btn btn-sm btn-outline-primary edit-connection" data-name="{{ account.name    }}">
+                        <button class="btn btn-sm btn-outline-primary edit-connection" data-name="{{ account.name }}">
                             <i class="fas fa-pen"></i>&nbsp;
                             {{ editButtonLabel }}
                         </button>
-                        <button class="btn btn-sm btn-outline-danger float-end delete-connection">
+                        <button class="btn btn-sm btn-outline-danger float-end delete-connection" data-connection-id="{{ account.connection_id }}">
                             <i class="far fa-trash-alt"></i>&nbsp;
                             Supprimer</button>
                     </div>

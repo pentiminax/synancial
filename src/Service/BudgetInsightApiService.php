@@ -14,10 +14,11 @@ use App\Model\PowensApi\Transaction;
 use App\Model\PermanentUserAccessToken;
 use App\Model\TemporaryCode;
 use App\Model\UserAccessToken;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class BudgetInsightApiService
@@ -44,6 +45,18 @@ class BudgetInsightApiService
         private readonly ParameterBagInterface $parameters
     )
     {
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function deleteConnection(int $id): int
+    {
+        $this->useBearerToken();
+
+        $response = $this->budgetInsightClient->request(Request::METHOD_DELETE, "/users/me/connections/$id", $this->options);
+
+        return $response->getStatusCode();
     }
 
     /**
@@ -272,8 +285,7 @@ class BudgetInsightApiService
 
         $data = [
             'client_id' => $this->parameters->get('client_id'),
-            'redirect_uri' => 'https://127.0.0.1:8000/api/users/me/webview',
-            'connector_uuids' => '07d76adf-ae35-5b38-aca8-67aafba13169',
+            'redirect_uri' => $this->parameters->get('redirect_uri'),
             'connector_capabilities' => $connectorCapabilities
         ];
 
@@ -283,7 +295,7 @@ class BudgetInsightApiService
 
         $query = http_build_query($data);
 
-        return "$baseUrl/auth/webview/fr/manage?$query";
+        return "$baseUrl/auth/webview/manage?$query";
     }
 
     public function updateConnection(int $id): Connection

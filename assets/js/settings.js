@@ -55,13 +55,40 @@ class Settings {
 
         navSync.innerHTML = json.result;
 
-        const editButtons = document.querySelectorAll('.edit-connection');
-
-        editButtons.forEach(btn => {
+        document.querySelectorAll('.edit-connection').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                this.editConnection(e.target.dataset.name);
+                this.editConnection(e.target.dataset['name']);
             });
         });
+
+        document.querySelectorAll('.delete-connection').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.deleteConnection(e.target.dataset['connectionId']);
+            });
+        });
+    }
+
+    deleteConnection(id) {
+        const init = {
+            method: 'DELETE'
+        };
+
+        fetch(`/api/connections/${id}`, init)
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: "Compte supprimé avec succès !",
+                        timer: 1000
+                    }).then(() => window.location.reload());
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Une erreur est survenue !",
+                        timer: 1000
+                    });
+                }
+            });
     }
 
     editConnection(name) {

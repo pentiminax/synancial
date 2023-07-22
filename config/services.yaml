@@ -3,6 +3,7 @@ parameters:
   client_id: '%env(CLIENT_ID)%'
   client_secret: '%env(CLIENT_SECRET)%'
   default_currency_code: '%env(DEFAULT_CURRENCY_CODE)%'
+  redirect_uri: '%env(REDIRECT_URI)%'
 
 services:
   _defaults:

@@ -30,6 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @method User getUser()
  */
+#[Route('/api')]
 class ApiController extends AbstractController
 {
     public function __construct(
@@ -41,7 +42,15 @@ class ApiController extends AbstractController
     {
     }
 
-    #[Route('/api/users/me', name: 'api_users_me', methods: ['GET'])]
+    #[Route('/connections/{id}', name: 'api_delete_connections', methods: ['DELETE'])]
+    public function deleteConnection(int $id): Response
+    {
+        $status = $this->api->deleteConnection($id);
+
+        return $this->json(new ApiResponse(), $status);
+    }
+
+    #[Route('/users/me', name: 'api_users_me', methods: ['GET'])]
     public function user(): Response
     {
         $user = $this->getUser();
@@ -51,7 +60,7 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/users/me', name: 'api_users_me_update', methods: ['PUT'])]
+    #[Route('/users/me', name: 'api_users_me_update', methods: ['PUT'])]
     public function updateUser(Request $request, UserService $userService): Response
     {
         $userService->updateUser($request->getContent());
@@ -59,7 +68,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse());
     }
 
-    #[Route('/api/users/me/accounts/{id}/transactions', name: 'api_users_me_accounts_transaction', methods: ['GET'])]
+    #[Route('/users/me/accounts/{id}/transactions', name: 'api_users_me_accounts_transaction', methods: ['GET'])]
     public function getTransactionsByAccount(int $id, Request $request): Response
     {
         $offset = $request->query->getInt('offset');
@@ -76,7 +85,7 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/users/me/views/dashboard', name: 'api_users_me_views_dashboard')]
+    #[Route('/users/me/views/dashboard', name: 'api_users_me_views_dashboard')]
     public function dashboard(ApiService $apiService): Response
     {
         if (!$this->getUser()->getBearerToken()) {
@@ -94,7 +103,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $dashboardData));
     }
 
-    #[Route('/api/users/me/views/wallet', name: 'api_users_me_views_wallet')]
+    #[Route('/users/me/views/wallet', name: 'api_users_me_views_wallet')]
     public function wallet(ApiService $apiService): Response
     {
         $walletData = $this->userSessionService->getWalletData();
@@ -118,7 +127,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $walletData));
     }
 
-    #[Route('/api/users/me/views/wallet/checking', name: 'api_users_me_views_wallet_checking', methods: ['GET'])]
+    #[Route('/users/me/views/wallet/checking', name: 'api_users_me_views_wallet_checking', methods: ['GET'])]
     public function accounts(): Response
     {
         $checkingData = $this->userSessionService->getCheckingData();
@@ -157,7 +166,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $accountsList));
     }
 
-    #[Route('/api/users/me/views/wallet/market', name: 'api_wallet_market_list')]
+    #[Route('/users/me/views/wallet/market', name: 'api_wallet_market_list')]
     #[Cache(public: true, maxage: 3600, mustRevalidate: true)]
     public function marketList(): Response
     {
@@ -175,7 +184,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $result));
     }
 
-    #[Route('/api/users/me/views/wallet/market/{id}', name: 'api_wallet_market_view')]
+    #[Route('/users/me/views/wallet/market/{id}', name: 'api_wallet_market_view')]
     public function marketView(int $id, DividendService $dividendService): Response
     {
         $account = $this->api->getBankAccount($id);
@@ -219,7 +228,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $result));
     }
 
-    #[Route('/api/users/me/views/wallet/loans', name: 'api_users_me_views_wallet_loans')]
+    #[Route('/users/me/views/wallet/loans', name: 'api_users_me_views_wallet_loans')]
     public function loansList(): Response
     {
         $loansData = $this->userSessionService->getLoansData();
@@ -262,7 +271,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $loansList));
     }
 
-    #[Route('/api/users/me/views/wallet/savings', name: 'api_users_me_views_wallet_savings')]
+    #[Route('/users/me/views/wallet/savings', name: 'api_users_me_views_wallet_savings')]
     public function savingsView(): Response
     {
         $savingsData = $this->userSessionService->getSavingsData();
@@ -300,7 +309,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(result: $accountsList));
     }
 
-    #[Route('/api/users/me/connections', name: 'api_users_me_connections')]
+    #[Route('/users/me/connections', name: 'api_users_me_connections')]
     public function connections(): Response
     {
         $accounts = [];
@@ -328,6 +337,7 @@ class ApiController extends AbstractController
             $data = $connectorsData[$connection->id_connector];
 
             $accounts[] = [
+                'connection_id' => $connection->id,
                 'id' => $connection->connector_uuid,
                 'name' => $data['name'],
                 'slug' => $data['slug'],
@@ -343,7 +353,7 @@ class ApiController extends AbstractController
         return $this->json(new ApiResponse(null, 'OK', $result));
     }
 
-    #[Route('/api/users/me/manage/connection', name: 'api_users_me_manage_connection')]
+    #[Route('/users/me/manage/connection', name: 'api_users_me_manage_connection')]
     public function manageConnection(Request $request): Response
     {
         $bearerToken = $this->getUser()->getBearerToken();
@@ -357,7 +367,7 @@ class ApiController extends AbstractController
         return $this->redirect($url);
     }
 
-    #[Route('/api/users/me/sync', name: 'api_users_me_sync', methods: ['PUT'])]
+    #[Route('/users/me/sync', name: 'api_users_me_sync', methods: ['PUT'])]
     public function sync(LoggerInterface $logger): Response
     {
         $user = $this->getUser();
@@ -384,7 +394,7 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/users/me/timeseries/{id}', name: 'api_users_me_timeseries')]
+    #[Route('/users/me/timeseries/{id}', name: 'api_users_me_timeseries')]
     public function timeseries(?int $id, TimeSerieService $timeSerieService): Response
     {
         $line = [];
@@ -406,7 +416,7 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/users/me/webview', name: 'api_users_me_webview')]
+    #[Route('/users/me/webview', name: 'api_users_me_webview')]
     public function webview(Request $request, ConnectionService $connectionService, UserSessionService $userSessionService): Response
     {
         $error = $request->get('error');
