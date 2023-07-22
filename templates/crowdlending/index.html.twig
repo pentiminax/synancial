@@ -5,11 +5,14 @@
 {% block body %}
     <div class="container">
 
-        <div class="row mb-3">
+        <div class="row mb-5">
             <div class="col">
                 <a class="h2 text-decoration-none text-dark" href="{{ path('wallet') }}">
                     <i class="fas fa-long-arrow-alt-left"></i>&nbsp;Crowdlending
                 </a>
+            </div>
+            <div class="col-auto">
+                <a class="btn btn-primary" href="{{ path('asset_add_crowdlendings') }}"><i class="fas fa-plus"></i>&nbsp;Ajouter un nouveau crowdlending</a>
             </div>
         </div>
 
@@ -30,15 +33,18 @@
                             <th>Durée (mois)</th>
                             <th>Rendement annuel</th>
                             <th>Valeur</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for crowdlending in crowdlendings %}
                             <tr>
-                                <td>{{ crowdlending.name }}</td>
-                                <td>{{ crowdlending.duration }}</td>
-                                <td>{{ crowdlending.annualYield|number_format(2, ',', ' ') }} %</td>
-                                <td>{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</td>
+                                <td style="width: 30%">{{ crowdlending.name }}</td>
+                                <td style="width: 20%">{{ crowdlending.duration }}</td>
+                                <td style="width: 20%">{{ crowdlending.annualYield|number_format(2, ',', ' ') }} %</td>
+                                <td style="width: 20%">{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</td>
+                                <td class="hstack gap-3 w-100" style="width: 20%"><i class="fas fa-edit"></i>&nbsp;<i class="fas fa-trash"></i>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
