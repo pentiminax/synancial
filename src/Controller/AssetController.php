@@ -31,6 +31,8 @@ class AssetController extends AbstractController
             $crowdlending = $form->getData();
 
             $crowdlendingService->add($crowdlending);
+
+            return $this->redirectToRoute('crowdlending_index');
         }
 
         return $this->render('asset/index.html.twig', [
