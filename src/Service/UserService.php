@@ -7,7 +7,7 @@ use App\Entity\Language;
 use App\Entity\User;
 use App\Model\UserAccountData;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UserService

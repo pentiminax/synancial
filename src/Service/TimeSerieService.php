@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\TimeSerie;
 use App\Entity\User;
 use App\Repository\TimeSerieRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class TimeSerieService
 {

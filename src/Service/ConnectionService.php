@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Connection;
 use App\Entity\Connector;
 use App\Repository\ConnectionRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ConnectionService
 {
