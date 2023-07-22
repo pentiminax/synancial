@@ -13,6 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/assets', name: 'asset_')]
 class AssetController extends AbstractController
 {
+    #[Route('/add', name: 'add')]
+    public function add(): Response
+    {
+        return $this->render('asset/add.html.twig');
+    }
+
     #[Route('/add/crowdlendings', name: 'add_crowdlendings')]
     public function addCrowdlendings(CrowdlendingService $crowdlendingService, Request $request): Response
     {

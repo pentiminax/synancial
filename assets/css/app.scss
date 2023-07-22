@@ -14,9 +14,22 @@ body.secret-mode {
   }
 }
 
+
+.card-assets {
+  @extend .card, .cursor-pointer, .text-center, .text-decoration-none;
+}
+
+.card-assets:hover {
+  @extend .bg-light;
+}
+
 .checking-account:hover {
   cursor: pointer;
   @extend .bg-light;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .wallet-checking-list:hover {

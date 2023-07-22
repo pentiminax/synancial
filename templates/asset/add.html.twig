@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compléter mon patrimoine{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="h2">Compléter mon patrimoine</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <a class="card-assets" href="{{ path('asset_add_crowdlendings') }}">
+                    <div class="card-body">
+                        <h5 class="card-title">Comptes bancaires</h5>
+                        <small class="card-text">Synchronisation sécurisée pour plus de 10 000 banques à travers le monde.</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a class="card-assets" href="{{ path('asset_add_crowdlendings') }}">
+                    <div class="card-body">
+                        <h5 class="card-title">Crowdlending</h5>
+                        <small class="card-text">Financement de projets de crowdlending ou crowdfunding. Suivi manuel ou synchronisé.</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

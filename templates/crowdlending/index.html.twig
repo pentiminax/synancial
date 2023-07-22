@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crowdlending{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row mb-3">
+            <div class="col">
+                <a class="h2 text-decoration-none text-dark" href="{{ path('wallet') }}">
+                    <i class="fas fa-long-arrow-alt-left"></i>
+                    Crowdlending
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body"></div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr role="row">
+                            <th>Nom</th>
+                            <th>Durée (mois)</th>
+                            <th>Rendement annuel</th>
+                            <th>Valeur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for crowdlending in crowdlendings %}
+                            <tr>
+                                <td>{{ crowdlending.name }}</td>
+                                <td>{{ crowdlending.duration }}</td>
+                                <td>{{ crowdlending.annualYield|number_format(2, ',', ' ') }} %</td>
+                                <td>{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
