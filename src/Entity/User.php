@@ -62,11 +62,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Currency $currency = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Crowdlending::class, orphanRemoval: true)]
+    private Collection $crowdlendings;
+
     public function __construct()
     {
         $this->connections = new ArrayCollection();
         $this->timeSeries = new ArrayCollection();
         $this->accounts = new ArrayCollection();
+        $this->crowdlendings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -322,6 +326,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCurrency(?Currency $currency): self
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Crowdlending>
+     */
+    public function getCrowdlendings(): Collection
+    {
+        return $this->crowdlendings;
+    }
+
+    public function addCrowdlending(Crowdlending $crowdlending): static
+    {
+        if (!$this->crowdlendings->contains($crowdlending)) {
+            $this->crowdlendings->add($crowdlending);
+            $crowdlending->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCrowdlending(Crowdlending $crowdlending): static
+    {
+        if ($this->crowdlendings->removeElement($crowdlending)) {
+            // set the owning side to null (unless already changed)
+            if ($crowdlending->getOwner() === $this) {
+                $crowdlending->setOwner(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compléter mon patrimoine{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 class="h2">Ajouter un crowdlending</h1>
+                {{ form_start(form) }}
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form_widget(form.name) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form_widget(form.investedAmount) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.currentValue) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form_widget(form.duration) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.investmentDate) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        {{ form_widget(form.annualYield) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.platform) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md text-md-end">
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
