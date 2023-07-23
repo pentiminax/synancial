@@ -76,7 +76,7 @@ class CrowdlendingType extends AbstractType
                 'label' => 'Plateforme'
             ])
             ->add('submit', SubmitType::class, [
-            'label' => 'Valider'
+                'label' => 'Valider'
             ]);
     }
 
