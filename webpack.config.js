@@ -12,6 +12,7 @@ Encore
      * ENTRY CONFIG
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('asset_crowdlending_add', './assets/js/asset/crowdlending/add.js')
     .addEntry('checking_list', './assets/js/wallet/checking/list.js')
     .addEntry('checking_view', './assets/js/wallet/checking/view.js')
     .addEntry('dashboard', './assets/js/dashboard.js')

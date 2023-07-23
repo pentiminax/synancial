@@ -19,10 +19,10 @@ class AssetController extends AbstractController
         return $this->render('asset/add.html.twig');
     }
 
-    #[Route('/add/crowdlendings', name: 'add_crowdlendings')]
-    public function addCrowdlendings(CrowdlendingService $crowdlendingService, Request $request): Response
+    #[Route('/add/crowdlending', name: 'add_crowdlending')]
+    public function addCrowdlending(CrowdlendingService $crowdlendingService, Request $request): Response
     {
-        $form = $this->createForm(CrowdlendingType::class);
+        $form = $this->createForm(CrowdlendingType::class, new Crowdlending());
 
         $form->handleRequest($request);
 

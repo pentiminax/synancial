@@ -6,8 +6,11 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="h2">Ajouter un crowdlending</h1>
-                {{ form_start(form) }}
+                <h1 class="h2 mb-3">Ajouter un crowdlending</h1>
+
+                <hr>
+
+                {{ form_start(form, { attr: { id: 'form_crowdlending_add' } }) }}
 
                 <div class="row mb-3">
                     <div class="col">
@@ -52,4 +55,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('asset_crowdlending_add') }}
 {% endblock %}

@@ -1,11 +1,9 @@
 @import "~bootstrap/scss/bootstrap";
-
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 @import "~@fortawesome/fontawesome-free/css/v4-shims.min.css";
-
 @import "~flatpickr/dist/flatpickr";
-
 @import  "tablesort/_site/tablesort.css";
+@import "~tom-select/dist/css/tom-select.bootstrap5.min.css";
 
 body.secret-mode {
   span[data-secret-mode="true"] {

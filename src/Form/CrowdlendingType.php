@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CrowdlendingType extends AbstractType
@@ -26,20 +28,26 @@ class CrowdlendingType extends AbstractType
             ])
             ->add('investedAmount', NumberType::class, [
                 'attr' => [
-                    'placeholder' => 'Montant investi'
+                    'min' => 0,
+                    'placeholder' => 'Montant investi',
                 ],
+                'html5' => true,
                 'label' => 'Montant investi',
             ])
             ->add('currentValue', NumberType::class, [
                 'attr' => [
+                    'min' => 0,
                     'placeholder' => 'Valeur actuelle'
                 ],
+                'html5' => true,
                 'label' => 'Valeur actuelle',
             ])
             ->add('duration', NumberType::class, [
                 'attr' => [
+                    'min' => 0,
                     'placeholder' => 'Durée'
                 ],
+                'html5' => true,
                 'label' => 'Durée',
                 'required' => false
             ])
@@ -53,8 +61,10 @@ class CrowdlendingType extends AbstractType
             ])
             ->add('annualYield', NumberType::class, [
                 'attr' => [
+                    'min' => 0,
                     'placeholder' => "Rendement cible"
                 ],
+                'html5' => true,
                 'label' => "Rendement cible",
                 'required' => false
             ])
@@ -68,6 +78,11 @@ class CrowdlendingType extends AbstractType
             ->add('submit', SubmitType::class, [
             'label' => 'Valider'
             ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return '';
     }
 
     public function configureOptions(OptionsResolver $resolver): void
