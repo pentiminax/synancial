@@ -17,8 +17,7 @@
                     <i class="fa-solid fa-lg {{ iconClass }}"></i>
                 </button>
             </h2>
-
-            <div id="panels-{{ account.slug }}" class="accordion-collapse collapse" aria-labelledby="panels-{{ account.slug }}">
+            <div class="accordion-collapse collapse" id="panels-{{ account.slug }}">
                 <div class="accordion-body">
                     <small>Mis à jour {{ account.last_sync_at|date('d/m/Y H:i:s') }}</small>
                     <hr class="dropdown-divider">

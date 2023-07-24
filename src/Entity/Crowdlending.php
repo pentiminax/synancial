@@ -34,6 +34,7 @@ class Crowdlending
 
     #[ORM\ManyToOne(inversedBy: 'crowdlending')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     private ?CrowdlendingPlatform $platform = null;
 
     #[ORM\ManyToOne(inversedBy: 'crowdlendings')]

@@ -63,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Currency $currency = null;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Crowdlending::class, orphanRemoval: true)]
+    #[ORM\OrderBy(['investmentDate' => 'ASC'])]
     private Collection $crowdlendings;
 
     public function __construct()

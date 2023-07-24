@@ -29,4 +29,13 @@ class CrowdlendingRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public  function getCrowdlendingsIndexedByPlatform(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.platform', 'p')
+            ->groupBy('c.platform')
+            ->getQuery()
+            ->getResult();
+    }
 }

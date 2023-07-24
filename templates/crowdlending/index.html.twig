@@ -5,14 +5,15 @@
 {% block body %}
     <div class="container">
 
-        <div class="row mb-5">
+        <div class="row mb-4">
             <div class="col">
                 <a class="h2 text-decoration-none text-dark" href="{{ path('wallet') }}">
-                    <i class="fas fa-long-arrow-alt-left"></i>&nbsp;Crowdlending
+                    <i class="fas fa-long-arrow-alt-left"></i>&nbsp;Crowdlending | {{ totalInvestedAmount ~ ' '  ~ app.user.currency.sign }}
                 </a>
             </div>
             <div class="col-auto">
-                <a class="btn btn-primary" href="{{ path('asset_add_crowdlending') }}"><i class="fas fa-plus"></i>&nbsp;Ajouter un nouveau crowdlending</a>
+                <a class="btn btn-sm btn-outline-primary disabled" href="#"><i class="fas fa-file-excel"></i>&nbsp;Importer</a>
+                <a class="btn btn-sm btn-primary" href="{{ path('asset_add_crowdlending') }}"><i class="fas fa-plus"></i>&nbsp;Ajouter un nouveau crowdlending</a>
             </div>
         </div>
 
@@ -26,32 +27,49 @@
             </div>
 
             <div class="col-md-8">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr role="row">
-                            <th>Nom</th>
-                            <th>Durée (mois)</th>
-                            <th>Rendement annuel</th>
-                            <th>Valeur</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for crowdlending in crowdlendings %}
-                            <tr>
-                                <td style="width: 30%">{{ crowdlending.name }}</td>
-                                <td style="width: 20%">{{ crowdlending.duration }}</td>
-                                <td style="width: 20%">{{ crowdlending.annualYield|number_format(2, ',', ' ') }} %</td>
-                                <td style="width: 20%">{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</td>
-                                <td class="hstack gap-3 w-100" style="width: 20%">
-                                    <i class="cursor-pointer fas fa-edit" data-bs-toggle="tooltip" title="Modifier"></i>
-                                    &nbsp;
-                                    <i class="cursor-pointer fas fa-trash" data-bs-toggle="tooltip" title="Supprimer"></i>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                {% for key, crowdlendingIndexedByPlatform in crowdlendingsIndexedByPlatform %}
+                    <div class="accordion mb-3">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ key }}" aria-expanded="true" aria-controls="#collapse-{{ key }}">
+                                    {{ crowdlendingIndexedByPlatform.platformName }}
+                                </button>
+                            </h2>
+                            <div class="accordion-collapse collapse show" id="collapse-{{ key }}">
+                                <div class="accordion-body">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>Nom</th>
+                                            <th>Date</th>
+                                            <th>Durée (mois)</th>
+                                            <th>Rendement annuel</th>
+                                            <th>Valeur</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for crowdlending in crowdlendingIndexedByPlatform.crowdlendings %}
+                                            <tr>
+                                                <td style="width: 20%">{{ crowdlending.name }}</td>
+                                                <td style="width: 15%">{{ crowdlending.investmentDate|date('d/m/Y') }}</td>
+                                                <td style="width: 20%">{{ crowdlending.duration }}</td>
+                                                <td style="width: 25%">{{ crowdlending.annualYield|number_format(2, ',', ' ') }} %</td>
+                                                <td style="width: 15%">{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</td>
+                                                <td class="hstack gap-3 w-100" style="width: 5%">
+                                                    <i class="cursor-pointer fas fa-edit" data-bs-toggle="tooltip" title="Modifier"></i>
+                                                    &nbsp;
+                                                    <i class="cursor-pointer fas fa-trash" data-bs-toggle="tooltip" title="Supprimer"></i>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
 
         </div>
