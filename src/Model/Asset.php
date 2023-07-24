@@ -24,7 +24,7 @@ class Asset
         $this->amount = $amount;
     }
 
-    public function addAmount(float $amount)
+    public function addAmount(float $amount): void
     {
         $this->amount += $amount;
     }

@@ -3,8 +3,11 @@
 namespace App\Service;
 
 use App\Entity\AccountType;
+use App\Entity\Crowdlending;
+use App\Entity\User;
 use App\Model\PowensApi\BankAccount;
 use App\Model\DataInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ApiService
 {
@@ -15,36 +18,35 @@ class ApiService
     {
         $distribution = $viewData->getDistribution();
 
-        $checkingAsset = $distribution->getChecking();
-        $crowdlendingsAsset = $distribution->getCrowdlendings();
-        $loanAsset = $distribution->getLoan();
-        $marketAsset = $distribution->getMarket();
-        $savingsAsset = $distribution->getSavings();
-
         foreach ($bankAccounts as $account) {
             $balance = $account->balance;
             switch ($account->type) {
                 case AccountType::CHECKING:
-                    $checkingAsset->addAmount($balance);
+                    $distribution->getChecking()->addAmount($balance);
                     break;
                 case AccountType::REAL_ESTATE:
-                    $crowdlendingsAsset->addAmount($balance);
+                    $distribution->getCrowdlendings()->addAmount($balance);
                     break;
                 case AccountType::LOAN:
-                    $loanAsset->addAmount(-$balance);
+                    $distribution->getLoan()->addAmount(-$balance);
                     break;
                 case AccountType::LIFEINSURANCE:
                 case AccountType::MARKET:
-                    $marketAsset->addAmount($balance);
+                    $distribution->getMarket()->addAmount($balance);
                     break;
                 case AccountType::SAVINGS:
-                    $savingsAsset->addAmount($balance);
+                    $distribution->getSavings()->addAmount($balance);
                     break;
                 default:
                     break;
             }
         }
+    }
 
-        $viewData->processCalculatedData();
+    public function aggregateCrowdlendingsAccounts(DataInterface &$viewData, User $user): void
+    {
+        $user->getCrowdlendings()->map(function (Crowdlending $crowdlending) use (&$viewData) {
+            $viewData->getDistribution()->getCrowdlendings()->addAmount($crowdlending->getInvestedAmount());
+        });
     }
 }

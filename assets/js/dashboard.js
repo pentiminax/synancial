@@ -12,17 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 class Dashboard {
-    allocationChart;
-    checkingShare;
-
     /** @type {DashboardData} */
     data;
-
-    marketShare;
-    savingsShare;
-    totalAmount;
-    netWorth;
-    financialAssets;
 
     async fetchFortuneoNews() {
         const response = await ajaxFetch('/api/fortuneo/news');
@@ -65,7 +56,6 @@ class Dashboard {
             }]
         };
 
-        console.log(data);
         new Chart(
             document.querySelector('#allocationChart'), {
                 type: 'doughnut',

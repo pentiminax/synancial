@@ -97,6 +97,8 @@ class ApiController extends AbstractController
         if (!$dashboardData) {
             $dashboardData = new DashboardData();
             $apiService->aggregateAssetsAccounts($dashboardData, $this->api->listBankAccounts());
+            $apiService->aggregateCrowdlendingsAccounts($dashboardData, $this->getUser());
+            $dashboardData->processCalculatedData();
             $this->userSessionService->setDashboardData($dashboardData);
         }
 
@@ -112,6 +114,7 @@ class ApiController extends AbstractController
             $walletData = new WalletData();
             $bankAccounts = $this->api->listBankAccounts();
             $apiService->aggregateAssetsAccounts($walletData, $bankAccounts);
+            $walletData->processCalculatedData();
             $this->userSessionService->setWalletData($walletData);
         }
 
