@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\AccountType;
 use App\Entity\Connector;
-use App\Exception\SynchronizationException;
 use App\Model\PowensApi\BankAccount;
 use App\Model\PowensApi\Connection;
 use App\Model\PowensApi\Document;
@@ -313,9 +312,6 @@ class BudgetInsightApiService
         return $this->serializer->deserialize($data, Connection::class, 'json');
     }
 
-    /**
-     * @throws SynchronizationException
-     */
     public function syncConnection(int $id): Connection
     {
         $baseUrl = $this->parameters->get('base_url');

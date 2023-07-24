@@ -5,6 +5,7 @@ namespace App\Query;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\Query\SqlWalker;
 
 class Year extends FunctionNode
@@ -16,6 +17,9 @@ class Year extends FunctionNode
         return "YEAR({$sqlWalker->walkArithmeticPrimary($this->date)})";
     }
 
+    /**
+     * @throws QueryException
+     */
     public function parse(Parser $parser): void
     {
         $parser->match(Lexer::T_IDENTIFIER);
