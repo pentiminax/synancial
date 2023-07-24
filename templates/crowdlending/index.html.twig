@@ -55,7 +55,9 @@
                                                 <td style="width: 15%">{{ crowdlending.investmentDate|date('d/m/Y') }}</td>
                                                 <td style="width: 20%">{{ crowdlending.duration }}</td>
                                                 <td style="width: 25%">{{ crowdlending.annualYield|number_format(2, ',', ' ') }} %</td>
-                                                <td style="width: 15%">{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</td>
+                                                <td style="width: 15%">
+                                                    <span data-secret-mode="true">{{ crowdlending.currentValue|number_format(2, ',', ' ') ~ ' ' ~ app.user.currency.sign }}</span>
+                                                </td>
                                                 <td class="hstack gap-3 w-100" style="width: 5%">
                                                     <i class="cursor-pointer fas fa-edit" data-bs-toggle="tooltip" title="Modifier"></i>
                                                     &nbsp;
