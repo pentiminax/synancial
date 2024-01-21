@@ -1,21 +1,50 @@
 version: '3'
 
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
+  caddy:
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+      - SERVER_NAME=${SERVER_NAME}
+    image: caddy:latest
+    networks:
+      - dev
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./:/var/www/synancial
+      - caddy_data:/data
+      - caddy_config:/config
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: synancial
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+    networks:
+      - dev
+    volumes:
+      - db_data:/var/lib/mysql
+
+  node:
+    image: node:20
+    volumes:
+      - .:/var/www/synancial
+    working_dir: /var/www/synancial
+
+  php:
+    build: .
+    networks:
+      - dev
+    volumes:
+      - ./:/var/www/synancial
+
+networks:
+  dev:
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  db-data:
-###< doctrine/doctrine-bundle ###
+  caddy_data:
+  caddy_config:
+  db_data:
