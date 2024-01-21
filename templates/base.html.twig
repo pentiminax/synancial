@@ -39,7 +39,12 @@
                             {% set isSyncButtonDisabled = app.user|is_sync_button_disabled %}
 
                             {% set syncButtonClass =  'sync-button' %}
-                            {% set syncButtonTitle = 'Mis à jour ' ~ app.user.lastSync|ago('now', 'fr') %}
+
+                            {% if app.user.lastSync is not null %}
+                                {% set syncButtonTitle = 'Mis à jour ' ~ app.user.lastSync|ago('now', 'fr') %}
+                            {% else %}
+                                {% set syncButtonTitle = 'Jamais synchronisé' %}
+                            {% endif %}
 
                             {% if isSyncButtonDisabled %}
                                 {% set syncButtonClass =  'disabled-sync-button' %}

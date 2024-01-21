@@ -1,13 +1,4 @@
 {
-    "doctrine/annotations": {
-        "version": "1.13",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "1.10",
-            "ref": "64d8583af5ea57b7afa4aba4b159907f3a148b05"
-        }
-    },
     "doctrine/cache": {
         "version": "2.1.1"
     },
@@ -74,14 +65,8 @@
     "doctrine/sql-formatter": {
         "version": "1.1.2"
     },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.12"
-    },
     "knplabs/knp-time-bundle": {
         "version": "v1.19.0"
-    },
-    "laminas/laminas-code": {
-        "version": "4.5.1"
     },
     "monolog/monolog": {
         "version": "2.6.0"
@@ -299,9 +284,6 @@
     },
     "symfony/property-info": {
         "version": "v6.0.7"
-    },
-    "symfony/proxy-manager-bridge": {
-        "version": "v6.0.6"
     },
     "symfony/routing": {
         "version": "6.0",

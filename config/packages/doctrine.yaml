@@ -4,6 +4,7 @@ doctrine:
     orm:
         auto_generate_proxy_classes: true
         auto_mapping: true
+        enable_lazy_ghost_objects: true
         dql:
             datetime_functions:
                 year: App\Query\Year

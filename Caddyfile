@@ -1,5 +1,5 @@
 {$SERVER_NAME} {
-	root * /var/www/synancial/public
+	root * /synancial/public
 	encode gzip
 	php_fastcgi php:9000
 	file_server

@@ -12,7 +12,7 @@ services:
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./:/var/www/synancial
+      - ./:/synancial
       - caddy_data:/data
       - caddy_config:/config
 
@@ -31,15 +31,15 @@ services:
   node:
     image: node:20
     volumes:
-      - .:/var/www/synancial
-    working_dir: /var/www/synancial
+      - .:/synancial
+    working_dir: /synancial
 
   php:
     build: .
     networks:
       - dev
     volumes:
-      - ./:/var/www/synancial
+      - ./:/synancial
 
 networks:
   dev:

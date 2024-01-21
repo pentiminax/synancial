@@ -18,4 +18,4 @@ RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | b
 
 RUN echo "memory_limit = 512M" > /usr/local/etc/php/conf.d/docker-php-memory-limit.ini
 
-WORKDIR /var/www/synancial
+WORKDIR /synancial
